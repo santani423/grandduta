@@ -1,0 +1,175 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class Laporan_bulanan extends CI_Controller
+{
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->library('template');
+		$this->load->helper('datecbo');
+        $this->load->library('FPDF_AutoWrapTableLaporanBulananBerjalanan');
+        $this->load->library('FPDF_AutoWrapTableLaporanBulananLalu');        
+        $this->load->library('FPDF_AutoWrapTableLaporan2BulananLalu');
+        $this->load->library('FPDF_AutoWrapTableLaporan3BulananLebih');
+        $this->load->library('FPDF_AutoWrapTableLaporanTotal');
+        
+        $this->load->library('table');	
+	}
+	
+	public function index()
+	{
+		if($this->auth->is_logged_in() == false)
+		{
+			$this->login();
+		}
+		else
+		{
+			// load model 'usermodel'
+			$this->load->model('usermodel');
+				
+			// level untuk user ini
+			$level = $this->session->userdata('level');
+				
+			// ambil menu dari database sesuai dengan level
+			$data['menu'] = $this->usermodel->get_menu_for_level($level);
+			
+			$data['action']  = 'laporan_bulanan/cetaklaporan';
+			
+			// set judul halaman
+			$data['judulpage'] = "Laporan Bulanan";
+			
+			$this->template->load('template','laporan/lapbul_view',$data);
+		}
+	}
+	
+	public function cetaklaporan()
+	{
+		// load model 'usermodel'
+		$this->load->model('usermodel');
+		$this->load->model('Master_model');
+		$this->load->model('Penagihan_model');
+		
+		$pilihanlapbul=$this->input->post('optionsRadios');
+
+		switch($pilihanlapbul)
+		{
+			case 1:
+/* 			========= Tagihan Bulan Berjalan - Start - ==========*/
+		
+			$rekaptagihan = $this->Penagihan_model->get_lapbul_berjalan();
+			$data = $rekaptagihan->result();
+			$datarow = $rekaptagihan->row();
+		
+			//pilihan
+			$options = array(
+				'filename' => '', //nama file penyimpanan, kosongkan jika output ke browser
+				'destinationfile' => '', //I=inline browser (default), F=local file, D=download
+				'paper_size'=>'A4',	//paper size: F4, A3, A4, A5, Letter, Legal
+				'orientation'=>'L' //orientation: P=portrait, L=landscape
+			);
+			
+			$tabel = new FPDF_AutoWrapTableLaporanBulananBerjalanan($data,$options);
+
+/* 			========= Tagihan Bulan Berjalan - End - ==========*/
+
+			$tabel->printPDF();
+
+			break;
+		
+			case 2;
+				
+/* 			========= Tagihan Bulan Lalu - Start - ==========*/
+		
+			$rekaptagihan1 = $this->Penagihan_model->get_lapbul_bulanlalu();
+			$data1 = $rekaptagihan1->result();
+			$datarow1 = $rekaptagihan1->row();
+		
+			//pilihan
+			$options = array(
+				'filename' => '', //nama file penyimpanan, kosongkan jika output ke browser
+				'destinationfile' => '', //I=inline browser (default), F=local file, D=download
+				'paper_size'=>'A4',	//paper size: F4, A3, A4, A5, Letter, Legal
+				'orientation'=>'L' //orientation: P=portrait, L=landscape
+			);
+			
+			$tabel1 = new FPDF_AutoWrapTableLaporanBulananLalu($data1,$options);
+		
+/* 			========= Tagihan Bulan Lalu - End - ==========*/
+		
+			$tabel1->printPDF();
+
+			break;
+			
+			case 3;
+			
+/* 			========= Tagihan Bulan Lalu - Start - ==========*/
+			
+			$rekaptagihan2 = $this->Penagihan_model->get_lapbul_2bulanlalu();
+			$data2 = $rekaptagihan2->result();
+			$datarow2 = $rekaptagihan2->row();
+			
+			//pilihan
+			$options = array(
+					'filename' => '', //nama file penyimpanan, kosongkan jika output ke browser
+					'destinationfile' => '', //I=inline browser (default), F=local file, D=download
+					'paper_size'=>'A4',	//paper size: F4, A3, A4, A5, Letter, Legal
+					'orientation'=>'L' //orientation: P=portrait, L=landscape
+			);
+				
+			$tabel2 = new FPDF_AutoWrapTableLaporan2BulananLalu($data2,$options);
+			
+			/* 			========= Tagihan Bulan Lalu - End - ==========*/
+			
+			$tabel2->printPDF();
+				
+			break;
+				
+			case 4;
+				
+/* 			========= Tagihan Bulan Lalu - Start - ==========*/
+				
+			$rekaptagihan3 = $this->Penagihan_model->get_lapbul_3bulanlebih();
+			$data3 = $rekaptagihan3->result();
+			$datarow3 = $rekaptagihan3->row();
+				
+			//pilihan
+			$options = array(
+					'filename' => '', //nama file penyimpanan, kosongkan jika output ke browser
+					'destinationfile' => '', //I=inline browser (default), F=local file, D=download
+					'paper_size'=>'A4',	//paper size: F4, A3, A4, A5, Letter, Legal
+					'orientation'=>'L' //orientation: P=portrait, L=landscape
+			);
+			
+			$tabel3 = new FPDF_AutoWrapTableLaporan3BulananLebih($data3,$options);
+				
+/* 			========= Tagihan Bulan Lalu - End - ==========*/
+				
+			$tabel3->printPDF();
+			
+			break;
+				
+			case 5;
+				
+/* 			========= Tagihan Bulan Lalu - Start - ==========*/
+				
+			$rekaptagihan4 = $this->Penagihan_model->get_lapbul_Total();
+			$data4 = $rekaptagihan4->result();
+			$datarow4 = $rekaptagihan4->row();
+				
+			//pilihan
+			$options = array(
+					'filename' => '', //nama file penyimpanan, kosongkan jika output ke browser
+					'destinationfile' => '', //I=inline browser (default), F=local file, D=download
+					'paper_size'=>'A4',	//paper size: F4, A3, A4, A5, Letter, Legal
+					'orientation'=>'L' //orientation: P=portrait, L=landscape
+			);
+			
+			$tabel4 = new FPDF_AutoWrapTableLaporanTotal($data4,$options);
+				
+/* 			========= Tagihan Bulan Lalu - End - ==========*/
+				
+			$tabel4->printPDF();
+				
+		}
+	}
+}

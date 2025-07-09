@@ -1,0 +1,45 @@
+<?php echo form_open(site_url($action),'role="form" class="form-horizontal" id="form_transaksi" parsley-validate'); ?>               
+<div class="panel panel-default">
+
+<div class="form-group">
+	<label for="nama" class="col-sm-2 control-label">Pilih Laporan Bulanan</label>
+      
+   <div class="col-sm-6"> 
+		<div class="radio">
+          	<label>
+          		<input type="radio" name="optionsRadios" id="optionsRadios1" value="1" checked>Bulan Berjalan
+        	</label>
+      	</div>
+       	<div class="radio">
+       		<label>
+				<input type="radio" name="optionsRadios" id="optionsRadios2" value="2">Bulan Lalu
+      		</label>
+      	</div>
+		<div class="radio">
+          	<label>
+          		<input type="radio" name="optionsRadios" id="optionsRadios3" value="3">Dua Bulan Lalu
+        	</label>
+      	</div>
+       	<div class="radio">
+       		<label>
+				<input type="radio" name="optionsRadios" id="optionsRadios4" value="4">Lebih Dari Tiga Bulan
+      		</label>
+      	</div>
+   </div>                                     
+</div> 
+
+<div class="panel-footer">   
+          <div class="row"> 
+              <div class="col-md-10 col-sm-12 col-md-offset-2 col-sm-offset-0">
+                   <a href="<?php echo site_url('laporan_bulanan'); ?>" class="btn btn-default">
+                       <i class="glyphicon glyphicon-chevron-left"></i> Kembali
+                   </a> 
+                    <button type="submit" class="btn btn-primary" name="post">
+                        <i class="glyphicon glyphicon-floppy-save"></i> Generate Laporan 
+                    </button>                  
+              </div>
+          </div>
+    </div><!--/ Panel Footer -->   
+
+</div>
+<?php echo form_close(); ?> 

@@ -1,0 +1,351 @@
+body
+{
+    font-family: "lucida grande", Tahoma, verdana, arial, sans-serif;
+    font-size:11px;
+    color: #333333;
+    margin:0 auto;
+    padding:0;
+    outline:none;
+    line-height:16px;
+}
+a{
+    outline:none;
+}
+#container
+{
+    margin:0 auto;
+    width:1000px;
+}
+#header
+{
+    
+}
+.logo
+{
+    height:70px;
+    background:url('../images/logo.png') no-repeat;
+}
+#content
+{
+    margin-top:2px;
+    border:1px solid #D8DFEA;
+    min-height:400px;
+    padding:7px;
+    background:#FFF;
+}
+#form_login
+{
+    width:300px;
+    margin:60px auto;
+}
+.title
+{
+    font-size:12px;
+    font-weight:bold;
+    padding-bottom:7px;
+    border-bottom:1px solid #E9E9E9;
+    margin-bottom:10px;
+    margin-top:10px;
+    vertical-align:middle;
+}
+.the_content
+{
+    
+}
+.the_footer
+{
+    margin-top:10px;
+    padding-top:5px;
+    border-top:1px solid #E9E9E9;
+}
+#footer
+{
+    clear:both;
+    width:995px;
+    margin:3px auto 20px;
+    text-align:left;
+    padding:5px 0px 10px;
+    color:#777777;
+}
+.left_footer
+{
+    float:left;
+}
+.right_footer
+{
+    float:right;
+}
+
+
+/****************** TABS ************************/
+
+#upper .tabs
+{
+    margin-left:230px;
+    height:30px;
+}
+.tab  
+{  
+    padding: 4px 10px;  
+    background-color: #d8dfea;  
+    color: #3b5998;  
+    font-weight: bold;
+    font-size:13px;
+    margin-right: .0001px;   
+    text-decoration: none;
+    white-space:nowrap;
+}  
+.tab:hover  
+{  
+    background-color: #3b5998;  
+    color: #ffffff;
+    cursor:pointer;
+    text-decoration: none; 
+}
+.current_tab{
+    background-color: #fff;
+    color: #333333;
+    padding: 4px 10px;  
+    font-weight: bold;
+    font-size:13px;
+    margin-right: .0001px;  
+    text-decoration: none;
+    border-top:#D8DFEA solid 1px;
+    border-right:#D8DFEA solid 1px;
+    border-left:#D8DFEA solid 1px;
+    white-space:nowrap;
+}
+
+/* TABLE */
+.grid tr th
+{
+    background-color:#d8dfea;
+}
+.grid tr:nth-child(2n+1)
+{
+    background-color:#ebf0f5;
+}
+.grid
+{			
+    background: #fff;
+    margin: 0px;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    table-layout:fixed;
+    border-bottom: 1px solid #3b5998;
+}
+.grid th
+{
+    font-weight: normal;			
+    padding: 5px 7px;
+    border-bottom: 2px solid #3b5998;
+}
+.grid td
+{
+    padding: 3px 7px;
+}
+.grid tr.bbottom
+{
+    border-bottom: 1px solid #d8dfea;
+}
+.grid tr.jumlah
+{
+    background-color:#d8dfea;
+    border-top: 1px solid #3b5998;
+    font-weight:bold;
+}
+.myform td
+{
+    line-height:20px;
+}
+.ctable
+{
+    background: #fff;
+    margin: 0px;
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    table-layout:fixed;
+}
+
+
+/* BUTTON */
+.button,.button:hover,.button:focus
+{
+    background-image:url('../images/buttons.png') ;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 105px;
+    width: 249px;
+    vertical-align:middle;
+    width:auto;
+    height:auto;
+    text-align:center;
+}
+.mediumbtn
+{
+    padding:4px 6px;
+    font-size:13px;
+}
+.smallbtn
+{
+    padding:2px 6px;
+    font-size:11px;
+}
+.buttonblue {
+    -moz-box-shadow:0 1px 0 #E5E5E5;
+    background-position:0 -48px;
+    border-color:#29447E #29447E #1A356E;
+    border-style:solid;
+    border-width:1px;
+    color:#ffffff;
+    font-weight:bold;
+    text-decoration:none;
+}
+.buttonblue:active
+{
+    background:#5B74A8 none;
+}
+.buttonwhite {
+    -moz-box-shadow:0 1px 0 #E5E5E5;
+    background-position:0 0px;
+    border-color:#999999 #999999 #888888;
+    border-style:solid;
+    border-width:1px;
+    color:#333333;
+    font-weight:bold;
+    text-decoration:none;
+    background-color:#EEEEEE;
+}
+.buttonwhite:active
+{
+    background:#EEEEEE none;
+}
+
+.buttonhover
+{
+    background-image:url('../images/buttons.png') ;
+    background-repeat: no-repeat;
+    background-position:0 192px;
+    border:1px solid #FFF;
+    padding:2px 6px;
+    display: inline-block;
+    height: 105px;
+    width: 249px;
+    vertical-align:middle;
+    width:auto;
+    height:auto;
+    text-align:center;
+}
+.buttonhover:hover
+{
+    -moz-box-shadow:0 1px 0 #E5E5E5;
+    background-position:0 0px;
+    border-color:#999999 #999999 #888888;
+    border-style:solid;
+    border-width:1px;
+    color:#333333;
+    text-decoration:none;
+    background-color:#EEEEEE;
+}
+
+input, textarea, select
+{
+    font-family: "lucida grande", Tahoma, verdana, arial, sans-serif;
+    border:1px solid #BDC7D8;
+    font-size:11px;
+    padding:3px;
+}
+textarea
+{
+    white-space:nowrap;
+}
+input[type=checkbox]
+{
+    vertical-align:middle;
+}
+.date
+{
+    background:#fff url('../images/calendar.gif') no-repeat 87px 2px;
+    width:100px;
+}
+.date:hover
+{
+    cursor:pointer;
+}
+
+.a_left
+{
+    text-align:left;
+}
+.a_right
+{
+    text-align:right;
+}
+.a_center
+{
+    text-align:center;
+}
+.f_right
+{
+    float:right;
+}
+.ajax_loading
+{
+    text-align:center;
+    margin-top:150px;
+}
+.ajax_loading_small
+{
+    margin-left:10px;
+}
+/* SPECIAL */
+.small
+{
+	font-size:10px;
+}
+.medium
+{
+	font-size:11px;
+}
+.semibig
+{
+	font-size:13px;
+}
+.bold
+{
+	font-weight:bold;
+}
+.dark99
+{
+	color:#999999;
+}
+.dark33
+{
+	color:#333333;
+}
+.dark77
+{
+	color:#777777;
+}
+.darkE9
+{
+	color:#E9E9E9;
+}
+.blue98
+{
+	color:#3B5998;
+}
+.link1
+{
+	text-decoration:none;
+}
+.link1:hover
+{
+	text-decoration:underline;
+}
+.clear
+{
+    clear:both;
+}

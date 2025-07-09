@@ -1,0 +1,64 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class Info_tagihan extends CI_Controller
+{
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->library('template');
+	}
+	
+	public function index()
+	{
+		if($this->auth->is_logged_in() == false)
+		{
+			$this->login();
+		}
+		else
+		{
+			// load model 'usermodel'
+			$this->load->model('usermodel');
+				
+			// level untuk user ini
+			$level = $this->session->userdata('level');
+				
+			// ambil menu dari database sesuai dengan level
+			$data['menu'] = $this->usermodel->get_menu_for_level($level);
+			
+			$data['action']  = 'info_tagihan/queryinfotagihan';
+			
+			// set judul halaman
+			$data['judulpage'] = "Cetak Ulang Kuitansi";
+			
+			$this->template->load('template','penagihan/cetakulang_view',$data);
+		}
+	}
+	
+	public function queryinfotagihan()
+	{
+		// load model 'usermodel'
+		$this->load->model('usermodel');
+		$this->load->model('Master_model');
+		$this->load->model('Penagihan_model');
+
+		$id=$this->input->post('idipkl');
+		
+		// level untuk user ini
+		$level = $this->session->userdata('level');
+			
+		// ambil menu dari database sesuai dengan level
+		$data['menu'] = $this->usermodel->get_menu_for_level($level);
+		
+		// set judul halaman
+		$data['judulpage'] = "Detail Informasi Tagihan";
+		
+			
+		$data['pelanggan'] = $this->Master_model->get_one($id);
+		$data['totalnya'] = $this->Penagihan_model->get_tagihantotal_belumlunas($id);
+		$data['tagihans'] = $this->Master_model->get_tagihan_fordetail($id);
+
+			
+		$this->template->load('template','penagihan/penagihanshow',$data);
+	}
+	
+}

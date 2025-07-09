@@ -1,0 +1,1339 @@
+<?php
+/**
+ * Penagihan_model Class
+ *
+ * @author	Trias Bratakusuma <brata@pdamtkr.co.id>
+ */
+class Penagihan_model extends CI_Model {
+	/**
+	 * Constructor
+	 */
+	function Penagihan_model()
+	{
+		parent::__Construct();
+	}
+	
+	// Inisialisasi nama tabel absen
+	var $table = 'tagihan';
+	
+	// =====================================================================================
+	
+	public function count_tagihan_percluster($cluster, $tahun, $bulan)
+	{
+		$this->db->from('tagihan');
+	
+		$this->db->where('left(idipkl,2)', $cluster);
+		$this->db->where('tahun', $tahun);
+		$this->db->where('bulan', $bulan);
+	
+		return $this->db->count_all_results();
+	}
+	
+	public function count_tagihan_percluster_telahdibayar($cluster, $tahun, $bulan)
+	{
+		$this->db->from('tagihan');
+	
+		$this->db->where('left(idipkl,2)', $cluster);
+		$this->db->where('tahun', $tahun);
+		$this->db->where('bulan', $bulan);	
+		$this->db->where('idstatustagihan', '2');
+		
+		return $this->db->count_all_results();
+	}
+
+	public function count_tagihan_khusus($tahunnya,$bulannya)
+	{
+		$sql = "select count(*) as jmltagkhusus from tagihan T ,nilaitagihankhusus K
+where T.idipkl=K.idipkl and tahun = '" . $tahunnya . "' and bulan = '" . $bulannya . "'";
+	
+		return $this->db->query($sql);
+	}
+	
+	
+	public function insert_kwitansi($nomorkwitansinya,$idipklnya,$namanya,
+						$clusternya,
+						$bloknya,
+						$nokavlingnya,
+						$totaltagihannya,
+						$totaldendanya,
+						$jumlahtotalnya,
+						$jumlahtagihannya,
+						$loketnya,
+						$kasirnya,
+						$rincianbulannya,
+						$idcarabayarnya,
+						$idlewatbayarnya)
+	{
+		$sql = "insert into kuitansi(nokuitansi,
+										idipkl,
+										tglbayar,
+										nama,
+										cluster,
+										blok,
+										nokavling,
+										totaltagihan,
+										totaldenda,
+										jumlahtotal,
+										jumlahtagihan,
+										loket,
+										kasir,
+										rincianbulan,
+										idcarabayar,
+										idlewatbayar) 	
+				values ('" .$nomorkwitansinya . "',
+						'" . $idipklnya. "',
+						now(),
+						'" .$namanya. "',
+						'" .$clusternya. "',
+						'" .$bloknya. "',
+						'" .$nokavlingnya. "',
+						'" .$totaltagihannya. "',
+						'" .$totaldendanya. "',
+						'" .$jumlahtotalnya. "',
+						'" .$jumlahtagihannya. "',
+						'" .$loketnya. "',
+						'" .$kasirnya. "',
+						'" .$rincianbulannya. "',
+						'" .$idcarabayarnya. "',
+						'" .$idlewatbayarnya. "'
+						)";
+	
+		return $this->db->query($sql);
+	}
+	
+	public function insert_tagihan_perclusterperbulan($cluster, $tahun, $bulan)
+	{
+		$sql = "insert into tagihan(idipkl, tahun, bulan, tagihan, idstatustagihan) select P.idipkl, '" . $tahun . "','" .$bulan . "'  ,C.tarif,'1'  From pelanggan P join cluster C on P.idcluster = C.idcluster where P.idcluster='" . $cluster . "'";
+
+		return $this->db->query($sql);
+	}	
+	
+	public function insert_tagihan_perid($idipklnya,$tahunnya,$bulannya,$tagihannya)
+	{
+		$sql = "insert into tagihan(idipkl,tahun,bulan,tagihan,idstatustagihan,kenadiskon,kenadenda) values('" . $idipklnya . "','" . $tahunnya . "','" . $bulannya . "','" . $tagihannya. "','1','1','1')";
+	
+		return $this->db->query($sql);
+	}
+	
+	public function delete_tagihan_perclusterperbulan($cluster, $tahun, $bulan)
+	{
+		$sql = "delete from tagihan where left(idipkl,2) = '" . $cluster . "' and tahun = '" . $tahun . "' and bulan = '" .$bulan . "'";
+			
+		return $this->db->query($sql);
+	}
+	
+	public function destroytagihan($id)
+	{
+		$this->db->where('idtagihan', $id);
+		$this->db->delete('tagihan');		
+	}
+	
+	public function get_tagihan_belumlunas($id)
+	{
+	    $this->db->where('vw_tagihan_blmlunas.idipkl', $id);
+        $result = $this->db->get('vw_tagihan_blmlunas');
+		
+        if ($result->num_rows() > 0) 
+        {
+            return $result->result_array();
+        } 
+        else 
+        {
+            return array();
+        }
+	}
+	
+	public function get_tagihantotal_belumlunas($id)
+	{
+		$this->db->select('sum(Jumlah) AS total');
+		$this->db->where('vw_tagihan_blmlunas.idipkl', $id);
+		$result = $this->db->get('vw_tagihan_blmlunas');
+	
+		if ($result->num_rows() == 1) 
+        {
+            return $result->row_array();
+        } 
+        else 
+        {
+            return array();
+        }	
+	}
+		
+	public function get_onepelanggan($id)
+	{
+		$this->db->where('vw_pelanggan_fordetail.ID_IPKL', $id);
+		$result = $this->db->get('vw_pelanggan_fordetail');
+		
+		return $result;
+	}
+	
+	public function get_tagihan($idipkl)
+	{
+		$sql = "select T.idtagihan, P.idipkl, P.namapelanggan, C.namacluster, P.blok, P.nokav, T.tahun, T.bulan, T.tagihan,f_denda(T.tagihan,T.bulan,T.tahun,T.kenadenda) AS denda,T.tagihan + f_denda(T.tagihan,T.bulan,T.tahun,T.kenadenda) AS total from tagihan T Join pelanggan P on T.idipkl = P.idipkl Join cluster C on P.idcluster=C.idcluster where T.idipkl = '$idipkl' and P.idbork='B'";
+			
+		return $this->db->query($sql);
+	}
+	
+	public function get_tagihan_terbatas($idipkl,$limits)
+	{
+		$sql = "select T.idtagihan, P.idipkl, P.namapelanggan, C.namacluster, P.blok, P.nokav, T.tahun, T.bulan, T.tagihan,f_denda(T.tagihan,T.bulan,T.tahun,T.kenadenda) AS denda,T.tagihan + f_denda(T.tagihan,T.bulan,T.tahun,T.kenadenda) AS total from tagihan T Join pelanggan P on T.idipkl = P.idipkl Join cluster C on P.idcluster=C.idcluster where T.idipkl = '$idipkl' and T.idstatustagihan='1'
+and P.idbork='B' order by tahun asc, bulan asc limit $limits";
+			
+		return $this->db->query($sql);
+	}
+	
+	public function get_tagihan_bylimit($idipkl,$limits)
+	{
+		$sql="select T.idtagihan, T.tahun, T.bulan, T.tagihan,f_denda(T.tagihan,T.bulan,T.tahun,T.kenadenda) AS denda,
+T.tagihan + f_denda(T.tagihan,T.bulan,T.tahun,T.kenadenda) AS Jumlah, S.namastatustagihan
+from tagihan T Join statustagihan S on T.idstatustagihan=S.idstatustagihan Join pelanggan P on T.idipkl=P.idipkl
+where T.idipkl = '$idipkl' and T.idstatustagihan='1' and P.idbork='B'
+order by tahun asc, bulan asc limit $limits";
+		
+		$result=$this->db->query($sql);
+		
+		if ($result->num_rows() > 0)
+		{
+			return $result->result_array();
+		}
+		else
+		{
+			return array();
+		}
+	}
+	
+	public function get_tagihan_total($idipkl)
+	{
+		$sql ="select count(idipkl) AS jmlbulantagihan,sum(tagihan) AS jmltagihan,sum(f_denda(tagihan,bulan,tahun,kenadenda)) AS jmldenda,sum(tagihan + f_denda(tagihan,bulan,tahun,kenadenda)) AS jmltotal from tagihan where idipkl = '$idipkl' and idstatustagihan = '1'";
+
+		return $this->db->query($sql);
+	}
+	
+	public function get_nomor_kwitansi()
+	{
+		$sql ="select year(current_date()) as tahun, month(current_date()) as bulan,count(*)+1 as counter from kuitansi";
+	
+		return $this->db->query($sql);
+	}
+	
+	public function cek_tagihan_sama($idipklnya,$tahunnya,$bulannya)
+	{
+		$sql ="select count(*) AS jml from tagihan where idipkl = '$idipklnya' and tahun = '$tahunnya' and bulan = '$bulannya'";
+	
+		return $this->db->query($sql);
+	}
+
+	public function get_tagihan_totalbylimit($idipkl,$limits)
+	{
+		$sql ="select count(idipkl) AS jmlbulantagihan,sum(tagihan) AS jmltagihan,sum(f_denda(tagihan,bulan,tahun)) AS jmldenda,sum(tagihan + f_denda(tagihan,bulan,tahun)) AS jmltotal from tagihan where idipkl = '$idipkl' and P.idbork='B' order by tahun asc, bulan asc
+limit $limits";
+	
+		$result=$this->db->query($sql);
+		
+		if ($result->num_rows() == 1)
+		{
+			return $result->row_array();
+		}
+		else
+		{
+			return array();
+		}		
+	}
+		
+	public function get_tahun_bulan($idipkl)
+	{
+		$sql = "select tahun,bulan from tagihan where idipkl = '$idipkl' and idstatustagihan='1'";
+				
+		return $this->db->query($sql);
+	}
+	
+	public function get_tahun_bulan_terbatas($idipkl,$limits)
+	{
+		$sql = "select tahun,bulan from tagihan where idipkl = '$idipkl' and idstatustagihan='1'
+order by tahun asc, bulan asc limit $limits";
+	
+		return $this->db->query($sql);
+	}
+	
+	public function updates_tagihan_lunas($idipklnya,$usernya)
+	{
+		$data = array(
+				'tglbayar' => now(),
+				'idloket' => '1',
+				'idstatustagihan'=>'2', 
+				'denda'=> 3000,
+				'user_id'=> $usernya
+		);
+		
+		$this->db->where('idipkl', $idipklnya);
+		$this->db->update('tagihan', $data);
+	
+	}
+
+	public function update_tagihan_lunas($idipklnya,$usernya,$nokwitnya)
+	{
+		$sql = "update tagihan set tglbayar=now(), user_id = '$usernya',idloket='1', idstatustagihan='2', denda = 0, nokuitansi='$nokwitnya' where idipkl = '$idipklnya'";
+	
+		return $this->db->query($sql);
+	}
+	
+	public function update_tagihan_lunas_cicilan($idtagihanya,$dendanya,$usernya,$nokwitnya)
+	{
+		$sql = "update tagihan set tglbayar=now(), user_id = '$usernya',idloket='1', idstatustagihan='2', denda = $dendanya, nokuitansi='$nokwitnya' where idtagihan in ('$idtagihanya')";
+	
+		return $this->db->query($sql);
+	}
+	
+	public function update_tagihan_lunas_mundur($idtagihanya,$dendanya,$usernya,$tgllunasnya)
+	{
+		$sql = "update tagihan set tglbayar='$tgllunasnya', user_id = '$usernya',idloket='1', idstatustagihan='2', denda = $dendanya' where idtagihan in ('$idtagihanya')";
+	
+		return $this->db->query($sql);
+	}
+	
+	public function update_tagihan_khusus($tahunnya,$bulannya)
+	{
+		$sql = "UPDATE tagihan T ,nilaitagihankhusus K SET T.tagihan=K.nilaitagihan
+where T.idipkl=K.idipkl and tahun = '" . $tahunnya . "' and bulan = '" . $bulannya . "'";
+	
+		return $this->db->query($sql);
+	}
+
+	public function get_tunggakan_kavling($idclusternya)
+	{
+		$sql="select T.idipkl,P.namapelanggan,C.namacluster, P.blok,P.nokav,T.tahun,T.bulan,T.tagihan * 0.5 as tagihan
+from tagihan T Right Join pelanggan P on T.idipkl= P.idipkl Join cluster C on P.idcluster=C.idcluster
+where idstatustagihan = '1' and left(T.idipkl,2)='$idclusternya' and P.idbork='K' and tahun=year(now()) and bulan=month(now())";
+		
+		return $this->db->query($sql);
+	}
+	
+	public function get_rekap_tunggakan($idclusternya)
+	{
+		$sql = "select T.idipkl,P.namapelanggan,C.namacluster, P.blok,P.nokav,sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0))tagihanbulanberjalan,sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,if(T.bulan=month(now())-1,T.tagihan,0))
+,0))tagihanbulanlalu,sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0))tagihan2bulanlalu,sum(tagihan)-(sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0))+sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,if(T.bulan=month(now())-1,T.tagihan,0))
+,0))+sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0))) as tagihan3bulanlebih,sum(T.tagihan) as Total
+from tagihan T Right Join pelanggan P on T.idipkl= P.idipkl Join cluster C on P.idcluster=C.idcluster
+where T.idstatustagihan = '1' and left(T.idipkl,2)='$idclusternya' and P.idbork='B' group by T.idipkl ";
+				
+		return $this->db->query($sql);
+		
+	}
+
+	
+	public function get_rekap_tunggakan_allcluster()
+	{
+		$sql = "select C.namacluster,sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0))tagihanbulanberjalan,sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,if(T.bulan=month(now())-1,T.tagihan,0))
+,0))tagihanbulanlalu,sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0))tagihan2bulanlalu,sum(tagihan)-(sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0))+sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,if(T.bulan=month(now())-1,T.tagihan,0))
+,0))+sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0))) as tagihan3bulanlebih,sum(T.tagihan) as Total
+from tagihan T Join pelanggan P on T.idipkl= P.idipkl Join cluster C on P.idcluster=C.idcluster
+where T.idstatustagihan='1' and P.idbork='B' group by left(T.idipkl,2)";
+	
+		return $this->db->query($sql);
+	
+	}
+	
+	public function get_lapbul()
+	{
+		$sql = "select C.namacluster,sum(if(T.idstatustagihan=1,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0),0))tagihanbulanberjalan,sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0),0))penerimaanbulanberjalan,sum(if(T.idstatustagihan=1,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,if(T.bulan=month(now())-1,T.tagihan,0))
+,0),0))tagihanbulanlalu,sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,if(T.bulan=month(now())-1,T.tagihan,0))
+,0),0))penerimaanbulanlalu,sum(if(T.idstatustagihan=1,
+if(tahun=year(now()),if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0),0))tagihan2bulanlalu,sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0),0))penerimaan2bulanlalu,sum(if(T.idstatustagihan=1,T.tagihan,0))-(sum(if(T.idstatustagihan=1,
+if(tahun=year(now()),if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0),0))+ sum(if(T.idstatustagihan=1,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,if(T.bulan=month(now())-1,T.tagihan,0))
+,0),0))+sum(if(T.idstatustagihan=1,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0),0))) as tagihan3bulanlebih,sum(if(T.idstatustagihan=2,T.tagihan,0))-
+(sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0),0))+ sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,if(T.bulan=month(now())-1,T.tagihan,0))
+,0),0))+ sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0),0))) as penerimaan3bulanlebih,sum(if(T.idstatustagihan=1,T.tagihan,0)) as totaltagihan,sum(
+if(T.idstatustagihan=2,T.tagihan,0)) as totalpenerimaan,sum(if(T.idstatustagihan=2,T.denda,0)) as denda
+from tagihan T Join pelanggan P on T.idipkl= P.idipkl Join cluster C on P.idcluster=C.idcluster
+group by left(T.idipkl,2)";
+				
+		return $this->db->query($sql);
+	}
+	
+	public function get_lapbul_berjalan()
+	{
+		$sql = "select C.namacluster,sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0))tagihanbulanberjalan,
+sum(if(T.idstatustagihan=2,if(tahun=year(now()),if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0),0))penerimaanbulanberjalan,
+sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0)) - 
+sum(if(T.idstatustagihan=2,if(tahun=year(now()),if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0),0))piutangbulanberjalan,
+((sum(if(T.idstatustagihan=2,if(tahun=year(now()),if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0),0)))/
+(sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0)))*100)efisiensipenagihan				
+from tagihan T Join pelanggan P on T.idipkl= P.idipkl Join cluster C on P.idcluster=C.idcluster where P.idbork='B' 
+group by left(T.idipkl,2)";
+	
+		return $this->db->query($sql);
+	}
+	
+	public function get_lapbul_bulanlalu()
+	{
+		$sql = "select C.namacluster,
+sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,
+if(T.bulan=month(now())-1,T.tagihan,0)),0))tagihanbulanlalu,
+sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,
+if(T.bulan=month(now())-1,T.tagihan,0)),0),0))penerimaanbulanlalu,
+sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,
+if(T.bulan=month(now())-1,T.tagihan,0)),0))-
+sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,if(T.bulan=month(now())-1,T.tagihan,0))
+,0),0))piutangbulanlalu,
+(sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,if(T.bulan=month(now())-1,T.tagihan,0))
+,0),0))/sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,
+if(T.bulan=month(now())-1,T.tagihan,0)),0))
+)*100 efisiensibulanlalu
+from tagihan T Join pelanggan P on T.idipkl= P.idipkl 
+Join cluster C on P.idcluster=C.idcluster where P.idbork='B'
+group by left(T.idipkl,2)";
+
+		return $this->db->query($sql);
+	}
+	
+	public function get_lapbul_2bulanlalu()
+	{
+		$sql = "select C.namacluster,
+sum(if(tahun=year(now()),if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0))tagihan2bulanlalu,
+sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0),0))penerimaan2bulanlalu,
+sum(if(tahun=year(now()),if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0))-
+sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0),0))piutang2bulanlalu,
+((sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0),0))/
+sum(if(tahun=year(now()),if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0)))*100) efisiensi2bulanlalu
+from tagihan T Join pelanggan P on T.idipkl= P.idipkl 
+Join cluster C on P.idcluster=C.idcluster where P.idbork='B'
+group by left(T.idipkl,2)";
+
+		return $this->db->query($sql);
+	}
+	
+	public function get_lapbul_3bulanlebih()
+	{
+		$sql = "select C.namacluster,
+sum(T.tagihan)-(sum(if(tahun=year(now()),if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0))+ sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,if(T.bulan=month(now())-1,T.tagihan,0))
+,0))+sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0))) as tagihan3bulanlebih,
+sum(if(T.idstatustagihan=2,T.tagihan,0))-
+(sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0),0))+ sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,if(T.bulan=month(now())-1,T.tagihan,0))
+,0),0))+ sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0),0))) as penerimaan3bulanlebih,
+(sum(T.tagihan)-(sum(if(tahun=year(now()),if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0))+ sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,if(T.bulan=month(now())-1,T.tagihan,0))
+,0))+sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0))))-
+(sum(if(T.idstatustagihan=2,T.tagihan,0))-
+(sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0),0))+ sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,if(T.bulan=month(now())-1,T.tagihan,0))
+,0),0))+ sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0),0)))) as piutang3bulanlebih,
+((sum(if(T.idstatustagihan=2,T.tagihan,0))-
+(sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0),0))+ sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,if(T.bulan=month(now())-1,T.tagihan,0))
+,0),0))+ sum(if(T.idstatustagihan=2,if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0),0))))/
+(sum(T.tagihan)-(sum(if(tahun=year(now()),if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())),T.tagihan,0) ,if(T.bulan=month(now()),T.tagihan,0))
+,0))+ sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-1),T.tagihan,0) ,if(T.bulan=month(now())-1,T.tagihan,0))
+,0))+sum(if(tahun=year(now()),
+if(CHAR_LENGTH(month(now()))=1,if(T.bulan=concat('0',month(now())-2),T.tagihan,0) ,if(T.bulan=month(now())-2,T.tagihan,0))
+,0)))))*100 as efisiensi3bulanlebih
+from tagihan T Join pelanggan P on T.idipkl= P.idipkl 
+Join cluster C on P.idcluster=C.idcluster where P.idbork='B'
+group by left(T.idipkl,2)";
+		
+		return $this->db->query($sql);	
+	}
+	
+	public function get_tidak_diangkut($idclusternya)
+	{
+		$sql = "select T.idipkl,P.namapelanggan,C.namacluster, P.blok, P.nokav,
+count(T.tagihan) as jmltunggakan, sum(T.tagihan) as jmltagihan from tagihan T join pelanggan P
+on T.idipkl=P.idipkl join cluster C on P.idcluster=C.idcluster where left(T.idipkl,2)='$idclusternya'
+and T.idstatustagihan='1' and P.idbork='B' group by idipkl having count(jmltunggakan)>=5";
+	
+		return $this->db->query($sql);
+	}
+	
+	public function get_pelanggan_percluster($idclusternya)
+	{
+		$sql="select distinct(P.idipkl),P.namapelanggan,C.namacluster,P.blok,P.nokav,C.tarif,P.idcluster
+from pelanggan P join cluster C on P.idcluster=C.idcluster 
+join tagihan T on P.idipkl=T.idipkl where T.idstatustagihan='1'and P.idcluster= '$idclusternya' and P.idbork='B'";
+		
+		return $this->db->query($sql);
+	}
+
+	public function get_pelanggan_perpelanggan($idipklnya)
+	{
+		$sql="select distinct(P.idipkl),P.namapelanggan,C.namacluster,P.blok,P.nokav,C.tarif,P.idcluster
+		from pelanggan P join cluster C on P.idcluster=C.idcluster
+		join tagihan T on P.idipkl=T.idipkl where T.idstatustagihan='1' and P.idipkl= '$idipklnya' and P.idbork='B'";
+	
+		return $this->db->query($sql);
+	}
+	
+	public function get_tagihan_perid($idipkl)
+	{
+		$sql="select tahun,bulan,tagihan from tagihan where idipkl='$idipkl' and idstatustagihan='1'
+order by tahun desc, bulan desc";
+	
+		return $this->db->query($sql);
+	}
+
+	public function get_tagihan_foraproval($idtagihan)
+	{
+		$sql="select idtagihan,idipkl,tahun,bulan,tagihan,denda,diskon,kenadiskon,kenadenda,ketaproval from tagihan
+where idtagihan='$idtagihan'";
+	
+		return $this->db->query($sql);
+	}
+	
+	public function get_lapcollector($idcluster)
+	{
+		$sql="SELECT T.idipkl,P.namapelanggan,P.blok,P.nokav,T.tahun,T.bulan,COUNT(T.idipkl) as jmlbulan, SUM(T.tagihan) as tagihan FROM tagihan T
+JOIN pelanggan P ON T.idipkl=P.idipkl
+WHERE T.idstatustagihan = '1' and P.idcluster='$idcluster' and P.idbork='B' 
+group by T.idipkl
+order by T.idipkl asc, T.tahun asc, T.bulan asc";
+		
+		return $this->db->query($sql);
+	}
+		
+	public function get_totaltagihan_perid($idipkl)
+	{
+		$sql="select sum(tagihan) as total from tagihan where idipkl='$idipkl' and idstatustagihan='1'";
+	
+		return $this->db->query($sql);
+	}
+	
+	public function get_alamat_perid($idipkl)
+	{
+		$sql="select P.idipkl, P.alamatktp,P.nohp,P.notelpon,C.namakecamatan,K.namakabupaten 
+from pelanggan P left join kecamatan C on P.idkecamatan=C.idkecamatan left join kabupaten K
+on C.idkabupaten=K.idkabupaten where P.idipkl='$idipkl'";
+	
+		return $this->db->query($sql);
+	}
+	
+	public function update_tagihan_dendadiskon($idtagihannya,$nilaidiskonnya,$kenadiskonnya,$kenadendanya,$usernya,$ket)
+	{
+		$data=array(
+				'tagihan'=>$nilaidiskonnya,
+				'kenadiskon'=>$kenadiskonnya,
+				'kenadenda'=>$kenadendanya,
+				'user_id_aprover'=>$usernya,
+				'ketaproval'=>$ket
+		);
+		
+		$this->db->where('idtagihan',$idtagihannya);
+		$this->db->update('tagihan',$data);
+	}
+	
+	public function update_tagihan($idtagihannya, $tahunnya, $bulannya, $tagihannya)
+	{
+		$data=array(
+				'tahun'=>$tahunnya,
+				'bulan'=>$bulannya,
+				'tagihan'=>$tagihannya
+		);
+	
+		$this->db->where('idtagihan',$idtagihannya);
+		$this->db->update('tagihan',$data);
+	}
+
+	public function update_tagihan_saja($idtagihannya, $tagihannya)
+	{
+		$data=array(
+				'tagihan'=>$tagihannya
+		);
+	
+		$this->db->where('idtagihan',$idtagihannya);
+		$this->db->update('tagihan',$data);
+	}
+	
+	public function update_tagihan_denda($idtagihannya,$kenadiskonnya,$kenadendanya,$usernya,$ket)
+	{
+		$data=array(
+				'kenadiskon'=>$kenadiskonnya,
+				'kenadenda'=>$kenadendanya,
+				'user_id_aprover'=>$usernya,
+				'ketaproval'=>$ket
+		);
+		
+		$this->db->where('idtagihan',$idtagihannya);
+		$this->db->update('tagihan',$data);
+	}
+	
+	public function get_lpp($tglnya)
+	{
+		$sql="select nokuitansi,idipkl,nama,blok,nokavling,jumlahtotal,jumlahtagihan,date(tglbayar) as tglbayar,rincianbulan from kuitansi
+where date(tglbayar) = '$tglnya' order by nokuitansi asc";
+
+		return $this->db->query($sql);
+	}
+	
+	function getCaraBayarList(){
+		$result = array();
+		$this->db->select('idcarabayar,namacarabayar');
+		$this->db->from('carabayar');
+		$array_keys_values = $this->db->get();
+		foreach ($array_keys_values->result() as $row)
+		{
+			$result[0]= '-Pilih Cara Pembayaran-';
+			$result[$row->idcarabayar]= $row->namacarabayar;
+		}
+	
+		return $result;
+	}
+	
+	function getLewatBayarList(){
+		$result = array();
+		$this->db->select('idlewatbayar,namalewatbayar');
+		$this->db->from('lewatbayar');
+		$array_keys_values = $this->db->get();
+		foreach ($array_keys_values->result() as $row)
+		{
+			$result[0]= '-Pilih Pembayaran Melalui-';
+			$result[$row->idlewatbayar]= $row->namalewatbayar;
+		}
+	
+		return $result;
+	}
+	
+	// =====================================================================================
+	
+	/**
+	 * Proses rekap data absensi dengan kriteria semester dan kelas tertentu
+	 */
+	 
+	public function get_all($limit, $offset) 
+    {
+        $result = $this->db->get('vw_pelanggan',$limit, $offset);
+        if ($result->num_rows() > 0) 
+        {
+            return $result->result_array();
+        } 
+        else 
+        {
+            return array();
+        }
+    } 
+	
+    public function get_all_cluster($limit, $offset)
+    {
+    	$result = $this->db->get('cluster',$limit, $offset);
+    	if ($result->num_rows() > 0)
+    	{
+    		return $result->result_array();
+    	}
+    	else
+    	{
+    		return array();
+    	}
+    }
+    
+	public function get_search($limit, $offset) 
+    {
+        $keyword = $this->session->userdata('keyword');
+                
+		$this->db->like('nama', $keyword);  
+                
+		$this->db->limit($limit, $offset);
+        
+		$result = $this->db->get('vw_anggota');
+
+        if ($result->num_rows() > 0) 
+        {
+            return $result->result_array();
+        } 
+        else 
+        {
+            return array();
+        }
+    }
+    
+    public function getdesa_search($limit, $offset)
+    {
+    	$keyword = $this->session->userdata('keyword');
+    
+    	$this->db->like('namadesa', $keyword);
+    
+    	$this->db->limit($limit, $offset);
+    
+    	$result = $this->db->get('vw_desa_all');
+    
+    	if ($result->num_rows() > 0)
+    	{
+    		return $result->result_array();
+    	}
+    	else
+    	{
+    		return array();
+    	}
+    }
+    
+    /**
+    * Search All anggota
+    * @param keyword : mixed
+    *
+    * @return Integer
+    *
+    */
+    public function count_all_search()
+    {
+        $keyword = $this->session->userdata('keyword');
+		//echo $keyword;
+		
+        $this->db->from('vw_anggota');   
+                
+		$this->db->like('nama', $keyword);  
+        
+        return $this->db->count_all_results();
+    }
+    
+    /**
+     * Search All anggota
+     * @param keyword : mixed
+     *
+     * @return Integer
+     *
+     */
+    public function countdesa_all_search()
+    {
+    	$keyword = $this->session->userdata('keyword');
+    	//echo $keyword;
+    
+    	$this->db->from('vw_desa_all');
+    
+    	$this->db->like('namadesa', $keyword);
+    
+    	return $this->db->count_all_results();
+    }
+	
+	
+	public function get_one($id) 
+    {
+        $this->db->where('vw_pelanggan_fordetail.ID_IPKL', $id);
+        $result = $this->db->get('vw_pelanggan_fordetail');
+
+        if ($result->num_rows() == 1) 
+        {
+            return $result->row_array();
+        } 
+        else 
+        {
+            return array();
+        }
+    }
+    
+    public function get_one_desa($id)
+    {
+    	$this->db->where('vw_desa_fordetail.ID_DESA', $id);
+    	$result = $this->db->get('vw_desa_fordetail');
+    
+    	if ($result->num_rows() == 1)
+    	{
+    		return $result->row_array();
+    	}
+    	else
+    	{
+    		return array();
+    	}
+    }
+    
+    public function get_one_kec($id)
+    {
+    	$this->db->where('vw_kec_fordetail.ID_KECAMATAN', $id);
+    	$result = $this->db->get('vw_kec_fordetail');
+    
+    	if ($result->num_rows() == 1)
+    	{
+    		return $result->row_array();
+    	}
+    	else
+    	{
+    		return array();
+    	}
+    }
+	
+	public function get_tagihan_fordetail($id) 
+    {
+        $this->db->where('vw_tagihan_fordetail.idipkl', $id);
+        $result = $this->db->get('vw_tagihan_fordetail');
+		
+        if ($result->num_rows() > 0) 
+        {
+            return $result->result_array();
+        } 
+        else 
+        {
+            return array();
+        }
+    }
+	
+	public function get_one_for_edit($id) 
+    {
+        $this->db->where('idipkl', $id);
+        $result = $this->db->get('pelanggan');
+
+        if ($result->num_rows() == 1) 
+        {
+            return $result->row_array();
+        } 
+        else 
+        {
+            return array();
+        }
+    }
+    
+    public function get_onedesa_for_edit($id)
+    {
+    	$this->db->where('iddesa', $id);
+    	$result = $this->db->get('tbl_desa');
+    
+    	if ($result->num_rows() == 1)
+    	{
+    		return $result->row_array();
+    	}
+    	else
+    	{
+    		return array();
+    	}
+    }
+    
+    
+    public function get_onekec_for_edit($id)
+    {
+    	$this->db->where('idkec', $id);
+    	$result = $this->db->get('tbl_kecamatan');
+    
+    	if ($result->num_rows() == 1)
+    	{
+    		return $result->row_array();
+    	}
+    	else
+    	{
+    		return array();
+    	}
+    }
+	
+	public function add()
+    {
+        $data = array(
+		
+				'idipkl' => '',
+                
+				'namapelanggan' => '',
+            
+                'idcluster' => '',
+            
+                'blok' => '',
+			
+				'nokav' => '',
+            
+                'bork' => '',
+            
+                'nohp' => '',
+            
+                'notelpon' => '',
+            
+                'alamatktp' => '',
+        		
+        		'idkecamatan' => '',
+        		
+        		'lb' => '',
+        			
+        		'lt' => '',
+        		
+        		'email' => '',
+        		
+        		'tglserahterima' => '',
+        		
+        		'idstatuspelanggan' => '',
+        		
+        		'user_id' => '',
+            
+        );
+
+        return $data;
+    }
+    
+    public function adddesa()
+    {
+    	$data = array(
+    
+    			'iddesa' => '',
+    
+    			'idkec' => '',
+    
+    			'namadesa' => '',
+    	);
+    
+    	return $data;
+    }
+    
+    public function addkec()
+    {
+    	$data = array(
+    
+    			'idkec' => '',
+
+    			'namakec' => '',
+    	);
+    
+    	return $data;
+    }
+    
+    /**
+    *  Save data Post
+    *
+    *  @return void
+    *
+    */
+    public function save() 
+    {
+        $data = array(
+		
+			'idanggota' => strip_tags($this->input->post('noanggota', TRUE)),
+        
+            'nama' => strip_tags($this->input->post('nama', TRUE)),
+        
+            'alamat' => strip_tags($this->input->post('alamat', TRUE)),
+        
+            'iddesa' => strip_tags($this->input->post('cbodesa', TRUE)),
+        
+            'idjk' => strip_tags($this->input->post('cbojk', TRUE)),
+        
+            'idagama' => strip_tags($this->input->post('cboagama', TRUE)),
+        
+            'tglmasuk' => strip_tags($this->input->post('tglmasuk', TRUE)),
+        
+            'idstatus' => strip_tags($this->input->post('cbostatus', TRUE)),
+        
+        );
+                
+        $this->db->insert('tbl_anggota', $data);
+    }
+    
+    function getClusterList(){
+    	$result = array();
+    	$this->db->select('idcluster,namacluster');
+    	$this->db->from('cluster');
+    	$array_keys_values = $this->db->get();
+    	foreach ($array_keys_values->result() as $row)
+    	{
+    		$result[0]= '-Pilih Cluster-';
+    		$result[$row->idcluster]= $row->namacluster;
+    	}
+    
+    	return $result;
+    }
+    
+    function getBorK(){
+    	$result = array();
+    	$this->db->select('*');
+    	$this->db->from('bork');
+    	$array_keys_values = $this->db->get();
+    	foreach ($array_keys_values->result() as $row)
+    	{
+    		$result[0]= '-Pilih Jenis Bangunan-';
+    		$result[$row->idbork]= $row->namabork;
+    	}
+    
+    	return $result;
+    }
+    
+    /**
+     *  Save data Post
+     *
+     *  @return void
+     *
+     */
+    public function savedesa()
+    {
+    	$data = array(
+    
+    			'iddesa' => strip_tags($this->input->post('iddesa', TRUE)),
+    
+    			'idkec' => strip_tags($this->input->post('cbokec', TRUE)),
+    
+    			'namadesa' => strip_tags($this->input->post('namadesa', TRUE)),
+    	);
+    
+    	$this->db->insert('tbl_desa', $data);
+    }
+    
+    public function savekec()
+    {
+    	$data = array(
+    
+    			'idkec' => strip_tags($this->input->post('idkec', TRUE)),
+    
+    			'namakec' => strip_tags($this->input->post('namakec', TRUE)),
+    	);
+    
+    	$this->db->insert('tbl_kecamatan', $data);
+    }
+    
+    /**
+    *  Update modify data
+    *
+    *  @param id : Integer
+    *
+    *  @return void
+    *
+    */
+    public function update($id)
+    {
+        $data = array(
+        
+                'nama' => strip_tags($this->input->post('nama', TRUE)),
+        
+                'alamat' => strip_tags($this->input->post('alamat', TRUE)),
+        
+                'iddesa' => strip_tags($this->input->post('cbodesa', TRUE)),
+        
+                'idjk' => strip_tags($this->input->post('cbojk', TRUE)),
+        
+                'idagama' => strip_tags($this->input->post('cboagama', TRUE)),
+        
+                'tglmasuk' => strip_tags($this->input->post('tglmasuk', TRUE)),
+        
+                'idstatus' => strip_tags($this->input->post('cbostatus', TRUE)),
+        
+        );        
+        
+        $this->db->where('idanggota', $id);
+        $this->db->update('tbl_anggota', $data);
+    }
+    
+    /**
+     *  Update modify data
+     *
+     *  @param id : Integer
+     *
+     *  @return void
+     *
+     */
+    public function updatedesa($id)
+    {
+    	$data = array(
+    
+    			'iddesa' => strip_tags($this->input->post('iddesa', TRUE)),
+    
+    			'idkec' => strip_tags($this->input->post('cbokec', TRUE)),
+    
+    			'namadesa' => strip_tags($this->input->post('namadesa', TRUE)),
+    
+    	);
+    
+    	$this->db->where('iddesa', $id);
+    	$this->db->update('tbl_desa', $data);
+    }
+    
+    public function updatekec($id)
+    {
+    	$data = array(
+    
+	   			'idkec' => strip_tags($this->input->post('idkec', TRUE)),
+    
+    			'namakec' => strip_tags($this->input->post('namakec', TRUE)),
+    
+    	);
+    
+    	$this->db->where('idkec', $id);
+    	$this->db->update('tbl_kecamatan', $data);
+    }
+       
+    
+    /**
+    *  Delete data by id
+    *
+    *  @param id : Integer
+    *
+    *  @return void
+    *
+    */
+    public function destroy($id)
+    {       
+        $this->db->where('idanggota', $id);
+        $this->db->delete('tbl_anggota');        
+    }
+	
+    /**
+     *  Delete data by id
+     *
+     *  @param id : Integer
+     *
+     *  @return void
+     *
+     */
+    public function destroydesa($id)
+    {
+    	$this->db->where('iddesa', $id);
+    	$this->db->delete('tbl_desa');
+    
+    }   
+
+    public function destroykec($id)
+    {
+    	$this->db->where('idkec', $id);
+    	$this->db->delete('tbl_kecamatan');
+    
+    } 
+    
+    public function get_status() 
+    {
+      
+        $result = $this->db->get('tbl_status')
+                           ->result();
+
+        $ret ['']= 'Pilih Status :';
+        if($result)
+        {
+            foreach ($result as $key => $row)
+            {
+                $ret [$row->idstatus] = $row->namastatus;
+            }
+        }
+        
+        return $ret;
+    }
+	
+	function count_all()
+	{
+		return $this->db->count_all('pelanggan');
+	}
+	
+	function count_all_cluster()
+	{
+		return $this->db->count_all('cluster');
+	}
+	
+	function count_desa_all()
+	{
+		return $this->db->count_all('tbl_desa');
+	}	
+	
+	function count_kec_all()
+	{
+		return $this->db->count_all('tbl_kecamatan');
+	}
+	
+/* 	function get_kec()
+	{
+		$this->db->order_by('idkec');
+		return $this->db->get('kecamatan');
+	} */
+	
+	function get_kecamatan_by_id($idkec)
+	{
+		return $this->db->get_where('kecamatan', array('idkec' => $idkec))->row();
+	}
+	
+	function count_kec()
+	{
+		return $this->db->count_all('kecamatan');
+	}
+	
+	function deletekec($idkec)
+	{
+		$this->db->delete('kecamatan', array('idkec' => $idkec));
+	}
+	
+	function get_desa_all($limit, $offset)
+	{
+	    $result = $this->db->get('vw_desa_all',$limit, $offset);
+        if ($result->num_rows() > 0) 
+        {
+            return $result->result_array();
+        } 
+        else 
+        {
+            return array();
+        }	
+	}
+	
+	function get_kec_all($limit, $offset)
+	{
+		$result = $this->db->get('tbl_kecamatan',$limit, $offset);
+		if ($result->num_rows() > 0)
+		{
+			return $result->result_array();
+		}
+		else
+		{
+			return array();
+		}
+	}
+	
+	function get_desa_by_idkec($idkec)
+	{
+		return $this->db->get_where('tbl_desa', array('idkec' => $idkec))->row();
+	}
+	
+	function count_desa()
+	{
+		return $this->db->count_all('tbl_desa');
+	}
+	
+	function adddesaold($desa)
+	{
+		$this->db->insert('tbl_desa', $desa);
+	}
+	
+	function get_desa_by_iddesa($iddesa)
+	{
+		return $this->db->get_where('tbl_desa', array('iddesa' => $iddesa))->row();
+	}
+	
+	function updatedesaold($iddesa, $desa)
+	{
+		$this->db->where('iddesa', $iddesa);
+		$this->db->update('tbl_desa', $desa);
+	}
+	
+	function deletedesaold($iddesa)
+	{
+		$this->db->delete('tbl_desa', array('iddesa' => $iddesa));
+	}
+	
+	function getKecamatanList(){
+		$result = array();
+		$this->db->select('*');
+		$this->db->from('tbl_kecamatan');
+		$this->db->order_by('namakec','ASC');
+		$array_keys_values = $this->db->get();
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[0]= '-Pilih Kecamatan-';
+            $result[$row->idkec]= $row->namakec;
+        }
+        
+        return $result;
+	}
+
+	function getDesaList(){
+		$idkec = $this->input->post('idkec');
+		$result = array();
+		$this->db->select('*');
+		$this->db->from('tbl_desa');
+		$this->db->where('idkec',$idkec);
+		$this->db->order_by('namadesa','ASC');
+		$array_keys_values = $this->db->get();
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[0]= '-Pilih Desa-';
+            $result[$row->iddesa]= $row->namadesa;
+        }
+        
+        return $result;
+	}
+	
+	
+	function getDesaListEdit($idkec){
+		//$idkec = $anggota->id;
+		$result = array();
+		$this->db->select('*');
+		$this->db->from('tbl_desa');
+		$this->db->where('idkec',$idkec);
+		$this->db->order_by('namadesa','ASC');
+		$array_keys_values = $this->db->get();
+        foreach ($array_keys_values->result() as $row)
+        {
+            $result[0]= '-Pilih Desa-';
+            $result[$row->iddesa]= $row->namadesa;
+        }
+        
+        return $result;
+	}
+	
+/* 	function add($anggota)
+	{
+		$this->db->insert($this->table, $anggota);
+	} */
+	
+	function get_anggota_by_id($anggota)
+	{
+		return $this->db->get_where('vw_anggota_all', array('noanggota' => $anggota))->row();
+	}
+	
+
+	
+}
+// END Absen_model Class
+
+/* End of file absen_model.php */
+/* Location: ./system/application/models/absen_model.php */

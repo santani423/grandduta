@@ -1,0 +1,220 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class Pelunasan_mundur extends CI_Controller
+{
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->library('template');
+	}
+	
+	public function index()
+	{
+		if($this->auth->is_logged_in() == false)
+		{
+			$this->login();
+		}
+		else
+		{
+			// load model 'usermodel'
+			$this->load->model('usermodel');
+				
+			// level untuk user ini
+			$level = $this->session->userdata('level');
+				
+			// ambil menu dari database sesuai dengan level
+			$data['menu'] = $this->usermodel->get_menu_for_level($level);
+			
+			$data['action']  = 'pelunasan_mundur/querytagihan';
+			
+			// set judul halaman
+			$data['judulpage'] = "Pelunasan Mundur";
+			
+			$this->template->load('template','penagihan/transaksi_view',$data);
+		}
+	}
+	
+	public function querytagihan()
+{
+    if($this->auth->is_logged_in() == false)
+    {
+        $this->login();
+    }
+    else
+    {
+        $this->load->model('usermodel');
+        $this->load->model('Master_model');
+        $this->load->model('Penagihan_model');
+
+        $idipkl = $this->input->post('idipkl');
+        $blok   = $this->input->post('blok');
+        $nokav  = $this->input->post('nokav');
+
+        $level = $this->session->userdata('level');
+        $data['menu'] = $this->usermodel->get_menu_for_level($level);
+        $data['action']  = 'penagihan/querytagihan';
+        $data['judulpage'] = "Update Data Tagihan";
+
+        // Ambil data pelanggan berdasarkan input
+        $pelangganbaris = $this->Penagihan_model->get_onepelanggan_multiup($idipkl, $blok, $nokav)->row();
+
+        if ($pelangganbaris) {
+            $data['default']['idipkl'] = $pelangganbaris->ID_IPKL;
+            $data['default']['nama'] = $pelangganbaris->NAMA_PELANGGAN;
+            $data['default']['blok'] = $pelangganbaris->BLOK;
+            $data['default']['nokav'] = $pelangganbaris->NO_KAVLING;
+            $data['default']['namacluster'] = $pelangganbaris->NAMA_CLUSTER;
+
+            $data['tagihans'] = $this->Penagihan_model->get_tagihan_belumlunas($pelangganbaris->ID_IPKL);
+            $data['totalnya'] = $this->Penagihan_model->get_tagihantotal_belumlunas($pelangganbaris->ID_IPKL);
+        } else {
+            $this->session->set_flashdata('error', 'Data pelanggan tidak ditemukan');
+            redirect('penagihan/formcari'); // ganti dengan halaman formulir pencarian
+            return;
+        }
+		
+		$this->template->load('template','penagihan/rincianpelunasanmundur_view',$data);
+    }
+}
+
+	public function querytagihan2()
+	{
+		if($this->auth->is_logged_in() == false)
+		{
+			$this->login();
+		}
+		else
+		{
+			// load model 'usermodel'
+			$this->load->model('usermodel');
+				
+			// load model 'usermodel'
+			$this->load->model('Master_model');
+			$this->load->model('Penagihan_model');
+		
+			$id=$this->input->post('idipkl');
+		
+			// level untuk user ini
+			$level = $this->session->userdata('level');
+		
+			// ambil menu dari database sesuai dengan level
+			$data['menu'] = $this->usermodel->get_menu_for_level($level);
+		
+			$data['action']  = 'penagihan/bayartagihan';
+		
+			// set judul halaman
+			$data['judulpage'] = "Approval Tagihan";
+				
+			// 			$pelanggan = $this->Master_model->get_one($id);
+			// 			$pelangganbaris = $pelanggan->result();
+				
+			$pelangganbaris = $this->Penagihan_model->get_onepelanggan($id)->row();
+				
+			$data['default']['idipkl']=$pelangganbaris->ID_IPKL;
+			$data['default']['nama']=$pelangganbaris->NAMA_PELANGGAN;
+			$data['default']['blok']=$pelangganbaris->BLOK;
+			$data['default']['nokav']=$pelangganbaris->NO_KAVLING;
+			$data['default']['namacluster']=$pelangganbaris->NAMA_CLUSTER;
+				
+			$data['tagihans'] = $this->Penagihan_model->get_tagihan_belumlunas($id);
+			$data['totalnya'] = $this->Penagihan_model->get_tagihantotal_belumlunas($id);
+		
+			$this->template->load('template','penagihan/rincianpelunasanmundur_view',$data);
+		}
+	}
+	
+	public function tampillunasmundur($id='')
+	{
+		if ($id != '')
+		{
+			// load model 'usermodel'
+			$this->load->model('usermodel');
+				
+			// load model 'usermodel'
+			$this->load->model('Master_model');
+			$this->load->model('Penagihan_model');
+							
+			// level untuk user ini
+			$level = $this->session->userdata('level');
+				
+			// ambil menu dari database sesuai dengan level
+			$data['menu'] = $this->usermodel->get_menu_for_level($level);
+	
+			// set judul halaman
+			$data['judulpage'] = "Pelunasan Mundur";
+			$data['action']  = 'pelunasan_mundur/updatelunasmundur';
+				
+			$tagihanbaris = $this->Penagihan_model->get_tagihan_foraproval($id)->row();
+				
+			$data['default']['idtagihan']=$tagihanbaris->idtagihan;
+			$data['default']['idipkl']=$tagihanbaris->idipkl;
+			$data['default']['tahun']=$tagihanbaris->tahun;
+			$data['default']['bulan']=$tagihanbaris->bulan;
+			$data['default']['tagihan']=$tagihanbaris->tagihan;
+			$data['default']['denda']=$tagihanbaris->denda;
+			//$data['default']['diskon']=$tagihanbaris->diskon;
+			//$data['default']['kenadiskon']=$tagihanbaris->kenadiskon;
+			//$data['default']['kenadenda']=$tagihanbaris->kenadenda;
+			//$data['default']['keterangan']=$tagihanbaris->ketaproval;
+			
+			//$data['main_view'] 		= 'master/_pelangganshow';
+			$this->template->load('template','penagihan/tagihanlunasmundurform',$data);
+	
+		}
+		else
+		{
+			//$this->session->set_flashdata('notif', notify('Data tidak ditemukan','info'));
+			redirect(site_url('master_pelanggan'));
+		}
+	}
+	
+	public function updatelunasmundur()
+	{
+			// load model 'usermodel'
+			$this->load->model('usermodel');
+			
+			// load model 'usermodel'
+			$this->load->model('Master_model');
+			$this->load->model('Penagihan_model');
+				
+			// level untuk user ini
+			$level = $this->session->userdata('level');
+			
+			// data user 
+			$user = $this->session->userdata('user_id');
+			
+			// ambil menu dari database sesuai dengan level
+			$data['menu'] = $this->usermodel->get_menu_for_level($level);
+			
+			$data['action']  = 'pelunasan_mundur/querytagihan';
+			
+			// set judul halaman
+			$data['judulpage'] = "Pelunasan Mundur";			
+			
+			
+			$idtagihan=$this->input->post('idtagihan');
+			$id=$this->input->post('idipkl');
+			//$tanggal=$this->input->post('tgllunas');
+			
+			$tgllunas= date('Y-m-d', strtotime($this->input->post('tgllunas'))); 
+			//$bulan=month($this->input->post('tgllunas'));
+			//$tgl=day($this->input->post('tgllunas'));
+			//$tgllunas=year($this->input->post('tgllunas')) . '-' . month($this->input->post('tgllunas')) .'-'. day($this->input->post('tgllunas')) .' 00:00:00';
+			//$tgllunas=$this->input->post('tgllunas');			
+			//echo $tahun;			
+			//echo $bulan;
+			//echo $tgl;
+			//echo $tanggal;
+			
+			$this->Penagihan_model->update_tagihan_lunas_mundur($idtagihan,$user,$tgllunas);
+			//echo $pelunasan;			
+			
+			//if($pelunasan)
+			//{
+					redirect('pelunasan_mundur');			
+			//}
+
+ 			//redirect(site_url('pelunasan_mundur'));
+	}
+	
+}

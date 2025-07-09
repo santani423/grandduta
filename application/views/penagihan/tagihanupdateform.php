@@ -1,0 +1,127 @@
+<?php echo form_open(site_url($action),'role="form" class="form-horizontal" id="form_tagihanaproval" parsley-validate'); ?>               
+<div class="panel panel-default">
+    <div class="panel-heading"><i class="glyphicon glyphicon-signal"></i> </div>
+     
+      <div class="panel-body">
+      
+      	<?php
+			echo ! empty($message) ? '<p class="message">' . $message . '</p>': '';
+	
+			$flashmessage = $this->session->flashdata('message');
+			echo ! empty($flashmessage) ? '<p class="message">' . $flashmessage . '</p>': '';
+			echo "<br>";
+		?>
+         
+             <div class="form-group">
+                   <label for="nama" class="col-sm-2 control-label">ID Tagihan</label>
+                <div class="col-sm-6">                                   
+                  <?php                  
+                   echo form_input(
+                                array(
+                                 'name'         => 'idtagihan',
+                                 'id'           => 'idtagihan',                       
+                                 'class'        => 'form-control input-sm ',
+                                 'placeholder'  => 'ID Tagihan',
+                                 'maxlength'=>'25',
+                                 'readonly'=>'yes'
+                                 ),
+                                 set_value('idtagihan',isset($default['idtagihan']) ? $default['idtagihan'] : '')
+                           );             
+                  ?>
+                 <?php echo form_error('idtagihan');?>
+                </div>
+              </div> <!--/ No. Anggota -->         
+  
+  
+             <div class="form-group">
+                   <label for="nama" class="col-sm-2 control-label">ID IPKL</label>
+                <div class="col-sm-6">                                   
+                  <?php                  
+                   echo form_input(
+                                array(
+                                 'name'         => 'idipkl',
+                                 'id'           => 'idipkl',                       
+                                 'class'        => 'form-control input-sm ',
+                                 'placeholder'  => 'ID IPKL',
+                                 'maxlength'=>'25',
+                                 'readonly'=>'yes'
+                                 ),
+                                 set_value('idipkl',isset($default['idipkl']) ? $default['idipkl'] : '')
+                           );             
+                  ?>
+                 <?php echo form_error('idipkl');?>
+                </div>
+              </div> <!--/ No. Anggota -->         
+
+			  <div class="form-group">
+                   <label for="nama" class="col-sm-2 control-label">Tahun Tagihan</label>
+                <div class="col-sm-6">                                   
+                  <?php                  
+                   echo form_input(
+                                array(
+                                 'name'         => 'tahun',
+                                 'id'           => 'tahun',                       
+                                 'class'        => 'form-control input-sm ',
+                                 'placeholder'  => 'Tahun Tagihan',
+                                 'maxlength'=>'25'
+                                 ),
+                                 set_value('tahun',isset($default['tahun']) ? $default['tahun'] : '')
+                           );             
+                  ?>
+                 <?php echo form_error('tahun');?>
+                </div>
+              </div> <!--/ Nama -->
+              
+              <div class="form-group">
+                   <label for="cbocluster" class="col-sm-2 control-label">Bulan Tagihan</label>
+                <div class="col-sm-6">                                   
+                  <?php                  
+                   echo form_input(
+                                array(
+                                 'name'         => 'bulan',
+                                 'id'           => 'bulan',                       
+                                 'class'        => 'form-control input-sm ',
+                                 'placeholder'  => 'Tahun Tagihan',
+                                 'maxlength'=>'25'
+                                 ),
+                                 set_value('tahun',isset($default['bulan']) ? $default['bulan'] : '')
+                           );             
+                  ?>
+                 <?php echo form_error('bulan');?>
+                </div>
+              </div> <!--/ IdCluster -->
+                          
+               <div class="form-group">
+                   <label for="alamat" class="col-sm-2 control-label">Tagihan</label>
+                <div class="col-sm-6">                                   
+                  <?php                  
+                   echo form_input(
+                                array(
+                                 'name'         => 'tagihan',
+                                 'id'           => 'tagihan',                       
+                                 'class'        => 'form-control input-sm ',
+                                 'placeholder'  => 'Tagihan',
+                                 'maxlength'=>'25'
+                                 ),
+                                 set_value('tagihan',isset($default['tagihan']) ? $default['tagihan'] : '')
+                           );             
+                  ?>
+                 <?php echo form_error('tagihan');?>
+                </div>
+              </div> <!--/ Blok -->
+              
+   </div> <!--/ Panel Body -->
+    <div class="panel-footer">   
+          <div class="row"> 
+              <div class="col-md-10 col-sm-12 col-md-offset-2 col-sm-offset-0">
+                   <a href="<?php echo site_url('aproval_penagihan'); ?>" class="btn btn-default">
+                       <i class="glyphicon glyphicon-chevron-left"></i> Kembali
+                   </a> 
+                    <button type="submit" class="btn btn-primary" name="post">
+                        <i class="glyphicon glyphicon-floppy-save"></i> Update Data 
+                    </button>                  
+              </div>
+          </div>
+    </div><!--/ Panel Footer -->       
+</div><!--/ Panel -->
+<?php echo form_close(); ?> 

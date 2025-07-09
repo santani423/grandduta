@@ -1,0 +1,176 @@
+<?php echo form_open(site_url($action),'role="form" class="form-horizontal" id="form_tagihanaproval" parsley-validate'); ?>               
+<div class="panel panel-default">
+    <div class="panel-heading"><i class="glyphicon glyphicon-signal"></i> </div>
+     
+      <div class="panel-body">
+         
+             <div class="form-group">
+                   <label for="nama" class="col-sm-2 control-label">ID Tagihan</label>
+                <div class="col-sm-6">                                   
+                  <?php                  
+                   echo form_input(
+                                array(
+                                 'name'         => 'idtagihan',
+                                 'id'           => 'idtagihan',                       
+                                 'class'        => 'form-control input-sm ',
+                                 'placeholder'  => 'ID Tagihan',
+                                 'maxlength'=>'25',
+                                 'readonly'=>'yes'
+                                 ),
+                                 set_value('idtagihan',isset($default['idtagihan']) ? $default['idtagihan'] : '')
+                           );             
+                  ?>
+                 <?php echo form_error('idtagihan');?>
+                </div>
+              </div> <!--/ No. Anggota -->         
+  
+  
+             <div class="form-group">
+                   <label for="nama" class="col-sm-2 control-label">ID IPKL</label>
+                <div class="col-sm-6">                                   
+                  <?php                  
+                   echo form_input(
+                                array(
+                                 'name'         => 'idipkl',
+                                 'id'           => 'idipkl',                       
+                                 'class'        => 'form-control input-sm ',
+                                 'placeholder'  => 'ID IPKL',
+                                 'maxlength'=>'25',
+                                 'readonly'=>'yes'
+                                 ),
+                                 set_value('idipkl',isset($default['idipkl']) ? $default['idipkl'] : '')
+                           );             
+                  ?>
+                 <?php echo form_error('idipkl');?>
+                </div>
+              </div> <!--/ No. Anggota -->         
+
+			  <div class="form-group">
+                   <label for="nama" class="col-sm-2 control-label">Tahun Tagihan</label>
+                <div class="col-sm-6">                                   
+                  <?php                  
+                   echo form_input(
+                                array(
+                                 'name'         => 'tahun',
+                                 'id'           => 'tahun',                       
+                                 'class'        => 'form-control input-sm ',
+                                 'placeholder'  => 'Tahun Tagihan',
+                                 'maxlength'=>'25',
+                                 'readonly'=>'yes'
+                                 ),
+                                 set_value('tahun',isset($default['tahun']) ? $default['tahun'] : '')
+                           );             
+                  ?>
+                 <?php echo form_error('tahun');?>
+                </div>
+              </div> <!--/ Nama -->
+              
+              <div class="form-group">
+                   <label for="cbocluster" class="col-sm-2 control-label">Bulan Tagihan</label>
+                <div class="col-sm-6">                                   
+                  <?php                  
+                   echo form_input(
+                                array(
+                                 'name'         => 'bulan',
+                                 'id'           => 'bulan',                       
+                                 'class'        => 'form-control input-sm ',
+                                 'placeholder'  => 'Tahun Tagihan',
+                                 'maxlength'=>'25',
+                                 'readonly'=>'yes'
+                                 ),
+                                 set_value('tahun',isset($default['bulan']) ? $default['bulan'] : '')
+                           );             
+                  ?>
+                 <?php echo form_error('bulan');?>
+                </div>
+              </div> <!--/ IdCluster -->
+                          
+               <div class="form-group">
+                   <label for="alamat" class="col-sm-2 control-label">Tagihan</label>
+                <div class="col-sm-6">                                   
+                  <?php                  
+                   echo form_input(
+                                array(
+                                 'name'         => 'tagihan',
+                                 'id'           => 'tagihan',                       
+                                 'class'        => 'form-control input-sm ',
+                                 'placeholder'  => 'Tagihan',
+                                 'maxlength'=>'5',
+                                 'readonly'=>'yes'
+                                 ),
+                                 set_value('tagihan',isset($default['tagihan']) ? $default['tagihan'] : '')
+                           );             
+                  ?>
+                 <?php echo form_error('tagihan');?>
+                </div>
+              </div> <!--/ Blok -->
+              
+               <div class="form-group">
+                   <label for="nohp" class="col-sm-2 control-label">Nilai Tagihan Setelah Diskon</label>
+                <div class="col-sm-6">                                   
+                  <?php                  
+                   echo form_input(
+                                array(
+                                 'name'         => 'diskon',
+                                 'id'           => 'diskon',                       
+                                 'class'        => 'form-control input-sm ',
+                                 'placeholder'  => '0',
+                                 'maxlength'=>'25'
+                                 ),
+                                 set_value('diskon',isset($default['diskon']) ? $default['diskon'] : '')
+                           );             
+                  ?>
+                 <?php echo form_error('diskon');?>
+                </div>
+              </div> <!--/ No. HP -->
+              
+				<div class="form-group">
+                   <label for="cbobork" class="col-sm-2 control-label">Kena Diskon</label>
+                <div class="col-sm-6">                                   
+				<?php                  
+                   echo form_input(
+                                array(
+                                 'name'         => 'keterangandiskon',
+                                 'id'           => 'keterangandiskon',                       
+                                 'class'        => 'form-control input-sm ',
+                                 'placeholder'  => '0',
+                                 'maxlength'=>'25'
+                                 ),
+                                 set_value('keterangandiskon',isset($default['keterangandiskon']) ? $default['keterangandiskon'] : '')
+                           );             
+                  ?>
+                 <?php echo form_error('keterangandiskon');?>
+                </div>
+              </div> <!--/ cbobork -->
+        
+               <div class="form-group">
+                   <label for="cbokec" class="col-sm-2 control-label">Kena Denda</label>
+                <div id="desadd" class="col-sm-6">                                   
+                  <?php                  
+                   echo form_input(
+                                array(
+                                 'name'         => 'kenadenda',
+                                 'id'           => 'kenadenda',                       
+                                 'class'        => 'form-control input-sm ',
+                                 'placeholder'  => '0',
+                                 'maxlength'=>'25'
+                                 ),
+                                 set_value('keterangandenda',isset($default['keterangandenda']) ? $default['keterangandenda'] : '')
+                           );             
+                  ?>
+                 <?php echo form_error('keterangandenda');?>
+                 </div>
+              </div> <!--/ IdKab -->
+          
+      </div> <!--/ Panel Body -->
+    <div class="panel-footer">   
+          <div class="row"> 
+              <div class="col-md-10 col-sm-12 col-md-offset-2 col-sm-offset-0">
+                   <a href="<?php echo site_url('aproval_penagihan'); ?>" class="btn btn-default">
+                       <i class="glyphicon glyphicon-chevron-left"></i> Kembali
+                   </a>                  
+              </div>
+          </div>
+    </div><!--/ Panel Footer -->       
+</div><!--/ Panel -->
+<?php echo form_close(); ?> 
