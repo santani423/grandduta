@@ -49,9 +49,9 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '';
-$db['default']['database'] = 'granddutadb';
+$db['default']['username'] = 'u858331583_grenduta';
+$db['default']['password'] = 'Grendut4';
+$db['default']['database'] = 'u858331583_grenduta';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
