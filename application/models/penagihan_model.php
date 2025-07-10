@@ -1264,6 +1264,7 @@ where idtagihan='$idtagihan'";
 	
 		return $this->db->query($sql);
 	}
+	//cek
 	
 	public function get_lapcollector($idcluster)
 	{
