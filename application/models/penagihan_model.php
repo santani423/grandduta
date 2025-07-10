@@ -1214,6 +1214,31 @@ join tagihan T on P.idipkl=T.idipkl Join huni H on P.idhuni=H.idhuni where T.ids
 		
 		return $this->db->query($sql);
 	}
+
+	public function get_pelanggan_by_blok_kavling($blok, $nokav)
+{
+    $sql = "SELECT DISTINCT(P.idipkl), 
+                   P.namapelanggan, 
+                   C.namacluster, 
+                   P.blok, 
+                   P.nokav, 
+                   C.tarif, 
+                   P.idcluster, 
+                   H.namahuni
+            FROM pelanggan P
+            JOIN cluster C ON P.idcluster = C.idcluster
+            JOIN huni H ON P.idhuni = H.idhuni
+            JOIN tagihan T ON P.idipkl = T.idipkl
+            WHERE T.idstatustagihan = '1'
+              AND P.blok = ?
+              AND P.nokav = ?
+              AND P.idbork IN ('B','P')
+            LIMIT 1"; // Optional: hanya ambil satu pelanggan saja
+
+    return $this->db->query($sql, array($blok, $nokav));
+}
+
+
         
 	public function get_pelanggan_perpelanggan($idipklnya)
 	{
