@@ -30,6 +30,7 @@ class Cetak_tagihan_perplg extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Cetak Tagihan Per Pelanggan";
+            $data['page'] = "cetak_tagihan_perplg";
 			
 			$this->template->load('template','penagihan/transaksi_view',$data);
 		}
@@ -67,6 +68,7 @@ class Cetak_tagihan_perplg extends CI_Controller
 				
 			// set judul halaman
 			$data['judulpage'] = "Cetak Tagihan Per Pelanggan";
+            $data['page'] = "cetak_tagihan_perplg";
 			
 // 			$pelanggan = $this->Master_model->get_one($id);
 // 			$pelangganbaris = $pelanggan->result();

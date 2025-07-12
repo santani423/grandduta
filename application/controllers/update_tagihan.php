@@ -29,6 +29,7 @@ class Update_tagihan extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Update Data Tagihan";
+			$data['page'] = "update_tagihan";
 			
 			$this->template->load('template','penagihan/transaksi_view',$data);
 		}

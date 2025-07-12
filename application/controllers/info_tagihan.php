@@ -42,6 +42,7 @@ class Info_tagihan extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Informasi Tagihan";
+			$data['page'] = "info_tagihan";
 			
 			$this->template->load('template','info/transaksi_view',$data);
 		}

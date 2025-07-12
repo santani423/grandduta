@@ -30,7 +30,7 @@ class Input_tagihan extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Input Tagihan";
-			
+			$data['page'] = "input_tagihan";
 			$this->template->load('template','penagihan/transaksi_view',$data);
 		}
 	}

@@ -33,6 +33,7 @@ class Cetak_rekap_cluster extends CI_Controller
 				
 			// set judul halaman
 			$data['judulpage'] = "Cetak Rekap Tagihan Semua Cluster";
+			$data['page'] = "cetak_rekap_cluster";
 				
 			$this->template->load('template','penagihan/cetakrekaptagihanallcluster_view',$data);
 				

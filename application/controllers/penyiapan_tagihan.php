@@ -36,6 +36,7 @@ class Penyiapan_tagihan extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Penyiapan Tagihan";
+            $data['page'] = "penyiapan_tagihan";
 			
 			$this->template->load('template','penagihan/penyiapantagihan_view',$data);
 		}

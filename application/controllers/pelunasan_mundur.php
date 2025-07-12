@@ -29,6 +29,7 @@ class Pelunasan_mundur extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Pelunasan Mundur";
+			$data['page'] = "pelunasan_mundur";
 			
 			$this->template->load('template','penagihan/transaksi_view',$data);
 		}
