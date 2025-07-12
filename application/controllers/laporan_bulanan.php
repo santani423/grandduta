@@ -44,6 +44,8 @@ class Laporan_bulanan extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Laporan Bulanan";
+
+			$data['page'] = 'laporan_bulanan';
 			
 			$this->template->load('template','laporan/lapbul_view',$data);
 		}
