@@ -9,19 +9,19 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <title>:: BigBucket :: Home</title>
 
-    <link rel="stylesheet" href="<?php echo base_url() . 'assets/vendor/themify-icons/themify-icons.css';?>">
-    <link rel="stylesheet" href="<?php echo base_url() . 'assets/vendor/fontawesome/css/font-awesome.min.css';?>">
+    <link rel="stylesheet" href="<?php echo base_url() . 'assets/vendor/themify-icons/themify-icons.css'; ?>">
+    <link rel="stylesheet" href="<?php echo base_url() . 'assets/vendor/fontawesome/css/font-awesome.min.css'; ?>">
 
-    <link rel="stylesheet" href="<?php echo base_url() . 'assets/vendor/charts-c3/plugin.css';?>" />
-    <link rel="stylesheet" href="<?php echo base_url() . 'assets/vendor/jvectormap/jquery-jvectormap-2.0.3.css';?>" />
-    <link rel="stylesheet" href="<?php echo base_url() . 'assets/css/main.css';?>" type="text/css">
+    <link rel="stylesheet" href="<?php echo base_url() . 'assets/vendor/charts-c3/plugin.css'; ?>" />
+    <link rel="stylesheet" href="<?php echo base_url() . 'assets/vendor/jvectormap/jquery-jvectormap-2.0.3.css'; ?>" />
+    <link rel="stylesheet" href="<?php echo base_url() . 'assets/css/main.css'; ?>" type="text/css">
 </head>
 
 <body class="theme-indigo">
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
-            <div class="m-t-30"><img src="<?php echo base_url() . 'assets/images/brand/icon_black.svg';?>" width="48" height="48" alt="ArrOw"></div>
+            <div class="m-t-30"><img src="<?php echo base_url() . 'assets/images/brand/icon_black.svg'; ?>" width="48" height="48" alt="ArrOw"></div>
             <p>Please wait...</p>
         </div>
     </div>
@@ -29,24 +29,24 @@
     <nav class="navbar custom-navbar navbar-expand-lg py-2">
         <div class="container-fluid px-0">
             <a href="javascript:void(0);" class="menu_toggle"><i class="fa fa-align-left"></i></a>
-            <a href="index.html" class="navbar-brand"><img src="<?php echo base_url() . 'assets/images/brand/icon.svg';?>" alt="BigBucket" /> <strong>Big</strong> Bucket</a>
+            <!-- <a href="index.html" class="navbar-brand"><img src="<?php echo base_url() . 'assets/images/brand/icon.svg'; ?>" alt="BigBucket" /> <strong>Big</strong> Bucket</a> -->
             <div id="navbar_main">
-                <ul class="navbar-nav mr-auto hidden-xs">
+                <!-- <ul class="navbar-nav mr-auto hidden-xs">
                     <li class="nav-item page-header">
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="index.html"><i class="fa fa-home"></i></a></li>
                             <li class="breadcrumb-item active">Dashboard</li>
                         </ul>
                     </li>
-                </ul>
+                </ul> -->
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item hidden-xs">
+                    <!-- <li class="nav-item hidden-xs">
                         <form class="form-inline main_search">
                             <input class="form-control form-control-sm mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
                         </form>
                     </li>
-                    <li class="nav-item"><a class="nav-link nav-link-icon" href="javascript:void(0);"><i class="fa fa-cogs"></i></a></li>
-                    <li class="nav-item dropdown">
+                    <li class="nav-item"><a class="nav-link nav-link-icon" href="javascript:void(0);"><i class="fa fa-cogs"></i></a></li> -->
+                    <!-- <li class="nav-item dropdown">
                         <a class="nav-link nav-link-icon" href="javascript:void(0);" id="navbar_1_dropdown_2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-bell"></i></a>
                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-xl py-0">
                             <div class="py-3 px-3">
@@ -79,18 +79,25 @@
                                 <a href="javascript:void(0);" class="link link-sm link--style-3">View all notifications</a>
                             </div>
                         </div>
-                    </li>
+                    </li> -->
                     <li class="nav-item dropdown">
                         <a class="nav-link nav-link-icon" href="javascript:void(0);" id="navbar_1_dropdown_3" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i></a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <h6 class="dropdown-header">User menu</h6>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="fa fa-user text-primary"></i>My Profile</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><span class="float-right badge badge-success">$50K</span><i class="fa fa-briefcase text-primary"></i>My Balance</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><span class="float-right badge badge-warning">4</span><i class="fa fa-envelope text-primary"></i>Inbox</a>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="fa fa-cog text-primary"></i>Settings</a>
-                            <div class="dropdown-divider" role="presentation"></div>
-                            <a class="dropdown-item" href="javascript:void(0);"><i class="fa fa-sign-out text-primary"></i>Sign out</a>
+                            <h6 class="dropdown-header">User Menu</h6>
+
+                            <a class="dropdown-item" href="javascript:void(0);">
+                                <i class="fa fa-id-badge text-primary"></i> My Profile
+                            </a>
+
+                            <a class="dropdown-item" href="ubah_password">
+                                <i class="fa fa-key text-warning"></i> Change Password
+                            </a>
+
+                            <a class="dropdown-item" href="home/logout">
+                                <i class="fa fa-sign-out-alt text-danger"></i> Sign Out
+                            </a>
                         </div>
+
                     </li>
                 </ul>
             </div>
@@ -101,8 +108,8 @@
 
         <div class="left_sidebar">
             <nav class="sidebar">
-                <div class="user-info">
-                    <div class="image"><a href="javascript:void(0);"><img src="<?php echo base_url() . 'assets/images/user.png';?>" alt="User"></a></div>
+                <!-- <div class="user-info">
+                    <div class="image"><a href="javascript:void(0);"><img src="<?php echo base_url() . 'assets/images/user.png'; ?>" alt="User"></a></div>
                     <div class="detail mt-3">
                         <h5 class="mb-0">Mike Thomas</h5>
                         <small>Admin</small>
@@ -112,7 +119,7 @@
                         <a href="javascript:void(0);" title="twitter"><i class="ti-linkedin"></i></a>
                         <a href="javascript:void(0);" title="instagram"><i class="ti-facebook"></i></a>
                     </div>
-                </div>
+                </div> -->
                 <ul id="main-menu" class="metismenu">
                     <li class="g_heading">Main</li>
 
@@ -293,86 +300,7 @@
                 <div class="tab-pane" id="Contact" role="tabpanel" aria-labelledby="Contact-tab">
                     <div class="sidebar-widget px-3">
                         <ul class="list-unstyled contact-list">
-                            <li class="d-flex align-items-center">
-                                <span class="contact-img">
-                                    <img src="<?php echo base_url() . 'assets/images/xs/avatar1.jpg';?>" class="rounded" alt="">
-                                </span>
-                                <h4 class="contact-name">Vincent Porter <span class="d-block">London UK</span></h4>
-                                <div class="action">
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"><i class="fab fa-skype"></i></a>
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"><i class="fa fa-envelope"></i></a>
-                                </div>
-                            </li>
-                            <li class="d-flex align-items-center">
-                                <span class="contact-img">
-                                    <img src="<?php echo base_url() . 'assets/images/xs/avatar2.jpg';?>" class="rounded" alt="">
-                                </span>
-                                <h4 class="contact-name">Mike Thomas <span class="d-block">London UK</span></h4>
-                                <div class="action">
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"><i class="fab fa-skype"></i></a>
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"><i class="fa fa-envelope"></i></a>
-                                </div>
-                            </li>
-                            <li class="d-flex align-items-center">
-                                <span class="contact-img">
-                                    <img src="<?php echo base_url() . 'assets/images/xs/avatar3.jpg';?>" class="rounded" alt="">
-                                </span>
-                                <h4 class="contact-name">Aiden Chavaz</h4>
-                                <div class="action">
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"><i class="fab fa-skype"></i></a>
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"><i class="fa fa-envelope"></i></a>
-                                </div>
-                            </li>
-                            <li class="d-flex align-items-center">
-                                <span class="contact-img">
-                                    <img src="<?php echo base_url() . 'assets/images/xs/avatar4.jpg';?>" class="rounded" alt="">
-                                </span>
-                                <h4 class="contact-name">Vincent Porter <span class="d-block">Miami USA</span></h4>
-                                <div class="action">
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"><i class="fab fa-skype"></i></a>
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"><i class="fa fa-envelope"></i></a>
-                                </div>
-                            </li>
-                            <li class="d-flex align-items-center">
-                                <span class="contact-img">
-                                    <img src="<?php echo base_url() . 'assets/images/xs/avatar5.jpg';?>" class="rounded" alt="">
-                                </span>
-                                <h4 class="contact-name">Mike Thomas <span class="d-block">Neyyork USA</span></h4>
-                                <div class="action">
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"><i class="fab fa-skype"></i></a>
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"><i class="fa fa-envelope"></i></a>
-                                </div>
-                            </li>
-                            <li class="d-flex align-items-center">
-                                <span class="contact-img">
-                                    <img src="<?php echo base_url() . 'assets/images/xs/avatar6.jpg';?>" class="rounded" alt="">
-                                </span>
-                                <h4 class="contact-name">Aiden Chavaz</h4>
-                                <div class="action">
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"><i class="fab fa-skype"></i></a>
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"><i class="fa fa-envelope"></i></a>
-                                </div>
-                            </li>
-                            <li class="d-flex align-items-center">
-                                <span class="contact-img">
-                                    <img src="<?php echo base_url() . 'assets/images/xs/avatar7.jpg';?>" class="rounded" alt="">
-                                </span>
-                                <h4 class="contact-name">Mike Thomas <span class="d-block">New Delhi IND</span></h4>
-                                <div class="action">
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"><i class="fab fa-skype"></i></a>
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"><i class="fa fa-envelope"></i></a>
-                                </div>
-                            </li>
-                            <li class="d-flex align-items-center">
-                                <span class="contact-img">
-                                    <img src="<?php echo base_url() . 'assets/images/xs/avatar8.jpg';?>" class="rounded" alt="">
-                                </span>
-                                <h4 class="contact-name">Aiden Chavaz</h4>
-                                <div class="action">
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"><i class="fab fa-skype"></i></a>
-                                    <a href="javascript:void(0);" class="btn btn-sm btn-outline-primary"><i class="fa fa-envelope"></i></a>
-                                </div>
-                            </li>
+                           
                         </ul>
                     </div>
                 </div>
@@ -409,15 +337,15 @@
     </div>
 
     <!-- Core -->
-    <script src="<?php echo base_url() . 'assets/bundles/libscripts.bundle.js';?>"></script>
-    <script src="<?php echo base_url() . 'assets/bundles/vendorscripts.bundle.js';?>"></script>
+    <script src="<?php echo base_url() . 'assets/bundles/libscripts.bundle.js'; ?>"></script>
+    <script src="<?php echo base_url() . 'assets/bundles/vendorscripts.bundle.js'; ?>"></script>
 
-    <script src="<?php echo base_url() . 'assets/bundles/c3.bundle.js';?>"></script>
-    <script src="<?php echo base_url() . 'assets/bundles/jvectormap.bundle.js';?>"></script> <!-- JVectorMap Plugin Js -->
+    <script src="<?php echo base_url() . 'assets/bundles/c3.bundle.js'; ?>"></script>
+    <script src="<?php echo base_url() . 'assets/bundles/jvectormap.bundle.js'; ?>"></script> <!-- JVectorMap Plugin Js -->
 
-    <script src="<?php echo base_url() . 'assets/js/theme.js';?>"></script>
-    <script src="<?php echo base_url() . 'assets/js/pages/index.js';?>"></script>
-    <script src="<?php echo base_url() . 'assets/js/pages/todo-js.js';?>"></script>
+    <script src="<?php echo base_url() . 'assets/js/theme.js'; ?>"></script>
+    <script src="<?php echo base_url() . 'assets/js/pages/index.js'; ?>"></script>
+    <script src="<?php echo base_url() . 'assets/js/pages/todo-js.js'; ?>"></script>
 </body>
 
 </html>
