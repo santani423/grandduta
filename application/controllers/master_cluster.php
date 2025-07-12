@@ -70,7 +70,8 @@ class Master_cluster extends CI_Controller
 			
 			$data['cluster'] = $this->Master_model->get_onecluster($id);
 						
-			//$data['main_view'] 		= 'master/_pelangganshow';
+			// $data['main_view'] 		= 'master/_pelangganshow';
+			// return false;
 			$this->template->load('template','master/_clustershow',$data);
 	
 		}

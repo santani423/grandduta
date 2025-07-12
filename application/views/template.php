@@ -9,19 +9,19 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <title>:: BigBucket :: Home</title>
 
-    <link rel="stylesheet" href="../assets/vendor/themify-icons/themify-icons.css">
-    <link rel="stylesheet" href="../assets/vendor/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<?php echo base_url() . 'assets/vendor/themify-icons/themify-icons.css';?>">
+    <link rel="stylesheet" href="<?php echo base_url() . 'assets/vendor/fontawesome/css/font-awesome.min.css';?>">
 
-    <link rel="stylesheet" href="../assets/vendor/charts-c3/plugin.css" />
-    <link rel="stylesheet" href="../assets/vendor/jvectormap/jquery-jvectormap-2.0.3.css" />
-    <link rel="stylesheet" href="../assets/css/main.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo base_url() . 'assets/vendor/charts-c3/plugin.css';?>" />
+    <link rel="stylesheet" href="<?php echo base_url() . 'assets/vendor/jvectormap/jquery-jvectormap-2.0.3.css';?>" />
+    <link rel="stylesheet" href="<?php echo base_url() . 'assets/css/main.css';?>" type="text/css">
 </head>
 
 <body class="theme-indigo">
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
-            <div class="m-t-30"><img src="../assets/images/brand/icon_black.svg" width="48" height="48" alt="ArrOw"></div>
+            <div class="m-t-30"><img src="<?php echo base_url() . 'assets/images/brand/icon_black.svg';?>" width="48" height="48" alt="ArrOw"></div>
             <p>Please wait...</p>
         </div>
     </div>
@@ -29,7 +29,7 @@
     <nav class="navbar custom-navbar navbar-expand-lg py-2">
         <div class="container-fluid px-0">
             <a href="javascript:void(0);" class="menu_toggle"><i class="fa fa-align-left"></i></a>
-            <a href="index.html" class="navbar-brand"><img src="../assets/images/brand/icon.svg" alt="BigBucket" /> <strong>Big</strong> Bucket</a>
+            <a href="index.html" class="navbar-brand"><img src="<?php echo base_url() . 'assets/images/brand/icon.svg';?>" alt="BigBucket" /> <strong>Big</strong> Bucket</a>
             <div id="navbar_main">
                 <ul class="navbar-nav mr-auto hidden-xs">
                     <li class="nav-item page-header">
@@ -102,7 +102,7 @@
         <div class="left_sidebar">
             <nav class="sidebar">
                 <div class="user-info">
-                    <div class="image"><a href="javascript:void(0);"><img src="../assets/images/user.png" alt="User"></a></div>
+                    <div class="image"><a href="javascript:void(0);"><img src="<?php echo base_url() . 'assets/images/user.png';?>" alt="User"></a></div>
                     <div class="detail mt-3">
                         <h5 class="mb-0">Mike Thomas</h5>
                         <small>Admin</small>
@@ -295,7 +295,7 @@
                         <ul class="list-unstyled contact-list">
                             <li class="d-flex align-items-center">
                                 <span class="contact-img">
-                                    <img src="../assets/images/xs/avatar1.jpg" class="rounded" alt="">
+                                    <img src="<?php echo base_url() . 'assets/images/xs/avatar1.jpg';?>" class="rounded" alt="">
                                 </span>
                                 <h4 class="contact-name">Vincent Porter <span class="d-block">London UK</span></h4>
                                 <div class="action">
@@ -305,7 +305,7 @@
                             </li>
                             <li class="d-flex align-items-center">
                                 <span class="contact-img">
-                                    <img src="../assets/images/xs/avatar2.jpg" class="rounded" alt="">
+                                    <img src="<?php echo base_url() . 'assets/images/xs/avatar2.jpg';?>" class="rounded" alt="">
                                 </span>
                                 <h4 class="contact-name">Mike Thomas <span class="d-block">London UK</span></h4>
                                 <div class="action">
@@ -315,7 +315,7 @@
                             </li>
                             <li class="d-flex align-items-center">
                                 <span class="contact-img">
-                                    <img src="../assets/images/xs/avatar3.jpg" class="rounded" alt="">
+                                    <img src="<?php echo base_url() . 'assets/images/xs/avatar3.jpg';?>" class="rounded" alt="">
                                 </span>
                                 <h4 class="contact-name">Aiden Chavaz</h4>
                                 <div class="action">
@@ -325,7 +325,7 @@
                             </li>
                             <li class="d-flex align-items-center">
                                 <span class="contact-img">
-                                    <img src="../assets/images/xs/avatar4.jpg" class="rounded" alt="">
+                                    <img src="<?php echo base_url() . 'assets/images/xs/avatar4.jpg';?>" class="rounded" alt="">
                                 </span>
                                 <h4 class="contact-name">Vincent Porter <span class="d-block">Miami USA</span></h4>
                                 <div class="action">
@@ -335,7 +335,7 @@
                             </li>
                             <li class="d-flex align-items-center">
                                 <span class="contact-img">
-                                    <img src="../assets/images/xs/avatar5.jpg" class="rounded" alt="">
+                                    <img src="<?php echo base_url() . 'assets/images/xs/avatar5.jpg';?>" class="rounded" alt="">
                                 </span>
                                 <h4 class="contact-name">Mike Thomas <span class="d-block">Neyyork USA</span></h4>
                                 <div class="action">
@@ -345,7 +345,7 @@
                             </li>
                             <li class="d-flex align-items-center">
                                 <span class="contact-img">
-                                    <img src="../assets/images/xs/avatar6.jpg" class="rounded" alt="">
+                                    <img src="<?php echo base_url() . 'assets/images/xs/avatar6.jpg';?>" class="rounded" alt="">
                                 </span>
                                 <h4 class="contact-name">Aiden Chavaz</h4>
                                 <div class="action">
@@ -355,7 +355,7 @@
                             </li>
                             <li class="d-flex align-items-center">
                                 <span class="contact-img">
-                                    <img src="../assets/images/xs/avatar7.jpg" class="rounded" alt="">
+                                    <img src="<?php echo base_url() . 'assets/images/xs/avatar7.jpg';?>" class="rounded" alt="">
                                 </span>
                                 <h4 class="contact-name">Mike Thomas <span class="d-block">New Delhi IND</span></h4>
                                 <div class="action">
@@ -365,7 +365,7 @@
                             </li>
                             <li class="d-flex align-items-center">
                                 <span class="contact-img">
-                                    <img src="../assets/images/xs/avatar8.jpg" class="rounded" alt="">
+                                    <img src="<?php echo base_url() . 'assets/images/xs/avatar8.jpg';?>" class="rounded" alt="">
                                 </span>
                                 <h4 class="contact-name">Aiden Chavaz</h4>
                                 <div class="action">
@@ -398,7 +398,7 @@
                 </div>
                 <div class="row clearfix">
                     <div class="col-xl-12 col-lg-12 col-md-12">
-                        <div class="card">
+                        <div class="card p-4">
                             <?php echo $contents ?>
                         </div>
                     </div>
@@ -409,15 +409,15 @@
     </div>
 
     <!-- Core -->
-    <script src="../assets/bundles/libscripts.bundle.js"></script>
-    <script src="../assets/bundles/vendorscripts.bundle.js"></script>
+    <script src="<?php echo base_url() . 'assets/bundles/libscripts.bundle.js';?>"></script>
+    <script src="<?php echo base_url() . 'assets/bundles/vendorscripts.bundle.js';?>"></script>
 
-    <script src="../assets/bundles/c3.bundle.js"></script>
-    <script src="../assets/bundles/jvectormap.bundle.js"></script> <!-- JVectorMap Plugin Js -->
+    <script src="<?php echo base_url() . 'assets/bundles/c3.bundle.js';?>"></script>
+    <script src="<?php echo base_url() . 'assets/bundles/jvectormap.bundle.js';?>"></script> <!-- JVectorMap Plugin Js -->
 
-    <script src="../assets/js/theme.js"></script>
-    <script src="../assets/js/pages/index.js"></script>
-    <script src="../assets/js/pages/todo-js.js"></script>
+    <script src="<?php echo base_url() . 'assets/js/theme.js';?>"></script>
+    <script src="<?php echo base_url() . 'assets/js/pages/index.js';?>"></script>
+    <script src="<?php echo base_url() . 'assets/js/pages/todo-js.js';?>"></script>
 </body>
 
 </html>
