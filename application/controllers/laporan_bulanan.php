@@ -22,6 +22,7 @@ class Laporan_bulanan extends CI_Controller
 	
 	public function index()
 	{
+		// return false;
 		if($this->auth->is_logged_in() == false)
 		{
 			$this->login();
