@@ -18,11 +18,11 @@
 <div class="panel-footer">   
           <div class="row"> 
               <div class="col-md-10 col-sm-12 col-md-offset-2 col-sm-offset-0">
-                   <a href="<?php echo site_url('cetak_rekap_tagihan'); ?>" class="btn btn-primary">
-                       <i class="fa fa-left"></i> Kembali
+                   <a href="<?php echo site_url('cetak_rekap_tagihan'); ?>" class="btn btn-warning">
+                       <i class="fa fa-chevron-left"></i> Kembali
                    </a> 
-                    <button type="submit" class="btn btn-warning" name="post">
-                        <i class="fa fa-floppy"></i> Cetak Tagihan 
+                    <button type="submit" class="btn btn-primary" name="post">
+                        <i class="fa fa-print"></i> Cetak Tagihan 
                     </button>                  
               </div>
           </div>
