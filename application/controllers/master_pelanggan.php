@@ -28,6 +28,7 @@ class Master_pelanggan extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Master Pelanggan";
+			$data['page'] = "master_pelanggan";
 			
 			$config = array(
 					'base_url'          => site_url('master_pelanggan/index'),

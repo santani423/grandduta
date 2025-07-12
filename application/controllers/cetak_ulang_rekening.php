@@ -30,6 +30,7 @@ class Cetak_ulang_rekening extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Cetak Ulang Kuitansi";
+			$data['page'] = "cetak_ulang_rekening";
 			
 			$this->template->load('template','penagihan/cetakulang_view',$data);
 		}

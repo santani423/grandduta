@@ -36,6 +36,7 @@ class Cetak_rekap_tagihan extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Cetak Rekap Tagihan";
+			$data['page'] = "cetak_rekap_tagihan";
 			
 			$this->template->load('template','penagihan/cetakrekaptagihan_view',$data);
 		}

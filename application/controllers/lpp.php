@@ -46,6 +46,7 @@ class LPP extends CI_Controller {
 				
 			// set judul halaman
 			$data['judulpage'] = "Laporan Penagihan Harian";
+			$data['page'] = "lpp";
 				
 			$this->template->load('template','laporan/lppform_view',$data);
 		}

@@ -66,6 +66,7 @@ class Master_cluster extends CI_Controller
 				
 			// set judul halaman
 			$data['judulpage'] = "Detail Master Cluster";
+			$data['page'] = "master_cluster";
 			
 			$data['cluster'] = $this->Master_model->get_onecluster($id);
 						

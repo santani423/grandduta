@@ -31,6 +31,7 @@ class Penagihan_cicilan extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Penagihan Cicilan";
+			$data['page'] = "penagihan_cicilan";
 			
 			$this->template->load('template','penagihan/transaksi_view',$data);
 		}
