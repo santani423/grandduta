@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/grandduta/';
+$config['base_url']	= 'https://grandduta.undesia.com/';
 $config['per_page'] = 10;
 
 /*
