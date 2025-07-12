@@ -21,7 +21,7 @@
                    <a href="<?php echo site_url('cetak_rekap_tagihan'); ?>" class="btn btn-primary">
                        <i class="fa fa-left"></i> Kembali
                    </a> 
-                    <button type="submit" class="btn btn-primary" name="post">
+                    <button type="submit" class="btn btn-warning" name="post">
                         <i class="fa fa-floppy"></i> Cetak Tagihan 
                     </button>                  
               </div>
