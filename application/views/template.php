@@ -127,7 +127,7 @@
                         <?php foreach ($menu->result() as $row): ?>
                             <li class="<?php echo (isset($page) && $page == $row->menu_uri) ? 'active' : ''; ?>">
                                 <a href="<?php echo site_url($row->menu_uri); ?>">
-                                    <i class="ti-vector"></i><span><?php echo $row->menu_nama; ?></span>
+                                    <i class="<?php echo $row->menu_icon; ?>"></i><span><?php echo $row->menu_nama; ?></span>
                                 </a>
                             </li>
                         <?php endforeach; ?>
