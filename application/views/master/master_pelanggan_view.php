@@ -14,13 +14,13 @@
             <?php
                 echo anchor(
                     site_url('master_pelanggan/add'),
-                    '<i class="glyphicon glyphicon-plus"></i> Tambah',
+                    '<i class="fa fa-plus"></i> Tambah',
                     'class="btn btn-success btn-sm" data-tooltip="tooltip" data-placement="top" title="Tambah Data"'
                 );
                 echo ' ';
                 echo anchor(
                     site_url('cetak_master_pelanggan'),
-                    '<i class="glyphicon glyphicon-print"></i> Cetak',
+                    '<i class="fa fa-print"></i> Cetak',
                     'class="btn btn-success btn-sm" data-tooltip="tooltip" data-placement="top" title="Cetak Data Master"'
                 );
             ?>
@@ -39,9 +39,9 @@
                     <input type="text" class="form-control input-sm" name="nokav" placeholder="No Kavling" value="<?php echo set_value('nokav'); ?>">
                 </div>
                 <button class="btn btn-primary btn-sm mb-2" type="submit">
-                    <i class="glyphicon glyphicon-search"></i> Cari
+                    <i class="fa fa-search"></i> Cari
                 </button>
-                <a href="<?php echo site_url('master_pelanggan'); ?>" class="btn btn-default btn-sm mb-2">Reset</a>
+                <a href="<?php echo site_url('master_pelanggan'); ?>" class="btn btn-warning btn-sm mb-2">Reset</a>
             <?php echo form_close(); ?>
         </div>
     </div>
@@ -73,17 +73,17 @@
                                 <?php
                                     echo anchor(
                                         site_url('master_pelanggan/show/' . $pelanggan['idipkl']),
-                                        '<i class="glyphicon glyphicon-eye-open"></i>',
+                                        '<i class="fa fa-eye"></i>',
                                         'class="btn btn-sm btn-info" data-tooltip="tooltip" data-placement="top" title="Detail"'
                                     );
                                     echo anchor(
                                         site_url('master_pelanggan/edit/' . $pelanggan['idipkl']),
-                                        '<i class="glyphicon glyphicon-edit"></i>',
+                                        '<i class="fa fa-edit"></i>',
                                         'class="btn btn-sm btn-success" data-tooltip="tooltip" data-placement="top" title="Edit"'
                                     );
                                     echo anchor(
                                         site_url('master_pelanggan/destroy/' . $pelanggan['idipkl']),
-                                        '<i class="glyphicon glyphicon-trash"></i>',
+                                        '<i class="fa fa-trash"></i>',
                                         'onclick="return confirm(\'Anda yakin..???\');" class="btn btn-sm btn-danger" data-tooltip="tooltip" data-placement="top" title="Hapus"'
                                     );
                                 ?>
