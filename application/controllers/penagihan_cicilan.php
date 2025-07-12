@@ -65,6 +65,7 @@ class Penagihan_cicilan extends CI_Controller
 			// set judul halaman
 			$data['judulpage'] = "Rincian Penagihan";
 				
+			$data['page'] = "penagihan_cicilan";
 			// 			$pelanggan = $this->Master_model->get_one($id);
 			// 			$pelangganbaris = $pelanggan->result();
                         
