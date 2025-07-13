@@ -88,50 +88,55 @@ class Aproval_penagihan extends CI_Controller
 	// 		$this->template->load('template','penagihan/rincianaproval_view',$data);
 	// 	}
 	// }
-	public function querytagihan()
+public function querytagihan()
 {
-    if ($this->auth->is_logged_in() == false) {
-        $this->login();
-    } else {
-        $this->load->model('usermodel');
-        $this->load->model('Penagihan_model');
-
-        // Ambil input dari form
-        $idipkl = $this->input->post('idipkl');
-        $blok   = $this->input->post('blok');
-        $nokav  = $this->input->post('nokav');
-
-        // Set data menu & judul
-        $level = $this->session->userdata('level');
-        $data['menu'] = $this->usermodel->get_menu_for_level($level);
-        $data['action']  = 'penagihan/bayartagihan';
-        $data['judulpage'] = "Approval Tagihan";
-
-        // Ambil data pelanggan
-        $pelangganbaris = $this->Penagihan_model->get_onepelanggan_multi1($idipkl, $blok, $nokav)->row();
-
-        if (!$pelangganbaris) {
-            $this->session->set_flashdata('error', 'Data pelanggan tidak ditemukan.');
-            redirect('aproval_penagihan');
-            return;
-        }
-
-        // Isi data default ke view
-        $data['default']['idipkl'] = $pelangganbaris->ID_IPKL;
-        $data['default']['nama'] = $pelangganbaris->NAMA_PELANGGAN;
-        $data['default']['blok'] = $pelangganbaris->BLOK;
-        $data['default']['nokav'] = $pelangganbaris->NO_KAVLING;
-        $data['default']['namacluster'] = $pelangganbaris->NAMA_CLUSTER;
-
-        // Ambil tagihan belum lunas
-        $data['tagihans'] = $this->Penagihan_model->get_tagihan_belumlunas($idipkl);
-        $data['totalnya'] = $this->Penagihan_model->get_tagihantotal_belumlunas($idipkl);
-
-        // Tampilkan halaman
-        $this->template->load('template', 'penagihan/rincianaproval_view', $data);
+    // Cek login
+    if (!$this->auth->is_logged_in()) {
+        return $this->login();
     }
-}
 
+    // Load model yang dibutuhkan
+    $this->load->model('usermodel');
+    $this->load->model('Penagihan_model');
+
+    // Ambil input dari form POST
+    $idipkl = $this->input->post('idipkl');
+    $blok   = $this->input->post('blok');
+    $nokav  = $this->input->post('nokav');
+
+    // Ambil menu berdasarkan level user
+    $level = $this->session->userdata('level');
+    $data['menu'] = $this->usermodel->get_menu_for_level($level);
+
+    // Konfigurasi halaman
+    $data['action']     = 'approval/querytagihan'; // Arahkan kembali ke form ini jika ingin pencarian ulang
+    $data['judulpage']  = "Approval Tagihan";
+
+    // Cari data pelanggan berdasarkan input
+    $pelangganbaris = $this->Penagihan_model->get_onepelanggan_multi1($idipkl, $blok, $nokav)->row();
+
+    if (!$pelangganbaris) {
+        $this->session->set_flashdata('error', 'Data pelanggan tidak ditemukan.');
+        redirect('aproval_penagihan');
+        return;
+    }
+
+    // Set data default untuk ditampilkan ke view
+    $data['default'] = [
+        'idipkl'      => $pelangganbaris->ID_IPKL,
+        'nama'        => $pelangganbaris->NAMA_PELANGGAN,
+        'blok'        => $pelangganbaris->BLOK,
+        'nokav'       => $pelangganbaris->NO_KAVLING,
+        'namacluster' => $pelangganbaris->NAMA_CLUSTER
+    ];
+
+    // Ambil tagihan belum lunas
+    $data['tagihans']  = $this->Penagihan_model->get_tagihan_belumlunas($pelangganbaris->ID_IPKL);
+    $data['totalnya']  = $this->Penagihan_model->get_tagihantotal_belumlunas($pelangganbaris->ID_IPKL);
+
+    // Load view
+    $this->template->load('template', 'penagihan/rincianaproval_view', $data);
+}
 
 public function get_onepelanggan1($id)
 	{
