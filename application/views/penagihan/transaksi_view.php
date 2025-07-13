@@ -1,6 +1,6 @@
 
 
-<!-- -------------------- -->
+
 
 
 <?php if ($this->session->flashdata('error')): ?>
