@@ -5,8 +5,9 @@ class Master_pelanggan extends CI_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library('template');
+		$this->load->library('template','form_validation');
 		$this->load->Model('Master_model'); 
+		$this->load->helper(['form', 'url']);
 	}
 	
 	public function index()
@@ -28,6 +29,7 @@ class Master_pelanggan extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Master Pelanggan";
+			$data['page'] = "master_pelanggan";
 			
 			$config = array(
 					'base_url'          => site_url('master_pelanggan/index'),
@@ -105,7 +107,7 @@ class Master_pelanggan extends CI_Controller
 		$data['isicluster'] = $this->Master_model->getClusterList();
 		$data['isibork'] = $this->Master_model->getBorK();
 		$data['isistatuspelanggan'] = $this->Master_model->getStatusPelanggan();
-                $data['isihuni'] = $this->Master_model->getStatusHuni();
+        $data['isihuni'] = $this->Master_model->getStatusHuni();
  		$data['isikab'] = $this->Master_model->getKabupatenList();
  		$data['isikec'] = $this->Master_model->getKecamatanList();
  		
@@ -245,100 +247,46 @@ class Master_pelanggan extends CI_Controller
 	 * Save & Update data  anggota
 	 *
 	 */
-	public function save($id =NULL)
-	{
-		// validation config
-		$config = array(
-	
-				array(
-						'field' => 'idipkl',
-						'label' => 'ID IPKL',
-						'rules' => 'trim|xss_clean'
-				),
-	
-				array(
-						'field' => 'namapelanggan',
-						'label' => 'Nama Pelanggan',
-						'rules' => 'trim|xss_clean'
-				),
-	
-				array(
-						'field' => 'alamat',
-						'label' => 'Alamat',
-						'rules' => 'trim|xss_clean'
-				),
-	
-				array(
-						'field' => 'cbodesa',
-						'label' => 'Desa',
-						'rules' => 'trim|xss_clean'
-				),
-	
-				array(
-						'field' => 'cbojk',
-						'label' => 'Jenis Kelamin',
-						'rules' => 'trim|xss_clean'
-				),
-	
-				array(
-						'field' => 'cboagama',
-						'label' => 'Id Agama',
-						'rules' => 'trim|xss_clean'
-				),
-	
-				array(
-						'field' => 'tglmasuk',
-						'label' => 'Tgl Masuk',
-						'rules' => 'trim|xss_clean'
-				),
-	
-				array(
-						'field' => 'cbostatus',
-						'label' => 'Status Anggota',
-						'rules' => 'trim|xss_clean'
-				),
-				 
-		);
-	
-		// if id NULL then add new data
-		if(!$id)
-		{
-			$this->form_validation->set_rules($config);
-	
-			if ($this->form_validation->run() == TRUE)
-			{
-				if($this->input->post())
-				{
-	
-					$this->Master_model->save();
-					$this->session->set_flashdata('notif', notify('Data berhasil di simpan','success'));
-					redirect('master_pelanggan');
-				}
-			}
-			else // If validation incorrect
-			{
-				$this->add();
-			}
-		}
-		else // Update data if Form Edit send Post and ID available
-		{
-			$this->form_validation->set_rules($config);
-	
-			if ($this->form_validation->run() == TRUE)
-			{
-				if ($this->input->post())
-				{
-					$this->Master_model->update($id);
-					$this->session->set_flashdata('notif', notify('Data berhasil di update','success'));
-					redirect('master_pelanggan');
-				}
-			}
-			else // If validation incorrect
-			{
-				$this->edit($id);
-			}
-		}
-	}
+	public function save($id = NULL)
+{
+    // Validasi input
+    $config = [
+        // ['field' => 'idipkl', 'label' => 'ID IPKL', 'rules' => 'required|trim|xss_clean', 'errors' => ['required' => 'Data ini masih kosong, harap diisi']],
+        ['field' => 'namapelanggan', 'label' => 'Nama Pelanggan', 'rules' => 'required|trim|xss_clean', 'errors' => ['required' => 'Data ini masih kosong, harap diisi']],
+        ['field' => 'cbocluster', 'label' => 'Cluster', 'rules' => 'required|trim|xss_clean', 'errors' => ['required' => 'Data ini masih kosong, harap diisi']],
+        ['field' => 'blok', 'label' => 'Blok', 'rules' => 'required|trim|xss_clean', 'errors' => ['required' => 'Data ini masih kosong, harap diisi']],
+        ['field' => 'nokav', 'label' => 'Nomor Kavling', 'rules' => 'required|trim|xss_clean', 'errors' => ['required' => 'Data ini masih kosong, harap diisi']],
+        ['field' => 'cbobork', 'label' => 'Bangunan/Kavling', 'rules' => 'required|trim|xss_clean', 'errors' => ['required' => 'Data ini masih kosong, harap diisi']],
+        ['field' => 'nohp', 'label' => 'Nomor HP', 'rules' => 'required|trim|xss_clean', 'errors' => ['required' => 'Data ini masih kosong, harap diisi']],
+        ['field' => 'email', 'label' => 'Email', 'rules' => 'required|valid_email|trim|xss_clean', 'errors' => ['required' => 'Data ini masih kosong, harap diisi', 'valid_email' => 'Format email tidak valid']],
+        ['field' => 'tglserahterima', 'label' => 'Tanggal Serah Terima', 'rules' => 'required|trim|xss_clean', 'errors' => ['required' => 'Data ini masih kosong, harap diisi']],
+        ['field' => 'cbostatushuni', 'label' => 'Status Hunian', 'rules' => 'required|trim|xss_clean', 'errors' => ['required' => 'Data ini masih kosong, harap diisi']],
+        ['field' => 'cbostatusplg', 'label' => 'Status Pelanggan', 'rules' => 'required|trim|xss_clean', 'errors' => ['required' => 'Data ini masih kosong, harap diisi']]
+    ];
+
+    $this->form_validation->set_rules($config);
+
+    if ($this->form_validation->run() === FALSE) {
+        if ($id) {
+            $this->edit($id);
+        } else {
+            $this->add();
+        }
+    } else {
+        if ($id) {
+            $result = $this->Master_model->update($id);
+            $msg = $result ? 'Data berhasil diperbarui' : 'Gagal memperbarui data';
+        } else {
+            $result = $this->Master_model->save();
+            $msg = $result ? 'Data berhasil disimpan' : 'Gagal menyimpan data';
+        }
+
+        $this->session->set_flashdata('notif', notify($msg, $result ? 'Data Berhasil di simpan' : 'danger'));
+        redirect('master_pelanggan');
+    }
+}
+
+
 	
 	public function destroy($id)
 	{

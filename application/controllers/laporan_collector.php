@@ -37,6 +37,7 @@ class Laporan_collector extends CI_Controller
 				
 			// set judul halaman
 			$data['judulpage'] = "Cetak Laporan Untuk Collector";
+			$data['page'] = "laporan_collector";
 				
 			$this->template->load('template','penagihan/cetakrekaptagihan_view',$data);
 				

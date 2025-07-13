@@ -22,6 +22,7 @@ class Laporan_bulanan extends CI_Controller
 	
 	public function index()
 	{
+		// return false;
 		if($this->auth->is_logged_in() == false)
 		{
 			$this->login();
@@ -43,6 +44,8 @@ class Laporan_bulanan extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Laporan Bulanan";
+
+			$data['page'] = 'laporan_bulanan';
 			
 			$this->template->load('template','laporan/lapbul_view',$data);
 		}

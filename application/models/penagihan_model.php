@@ -1194,26 +1194,59 @@ join tagihan T on P.idipkl=T.idipkl Join huni H on P.idhuni=H.idhuni where T.ids
 		return $this->db->query($sql);
 	}
 
-        public function get_pelanggan_perclusterpiutang1($idclusternya,$idhuninya) 
-	{
-		$sql="SELECT T.idipkl, P.namapelanggan, C.namacluster, P.blok, P.nokav, H.namahuni, C.tarif, count(T.idipkl) FROM tagihan T Join pelanggan P on T.idipkl = P.idipkl join cluster C on P.idcluster = C.idcluster Join huni H on P.idhuni=H.idhuni where T.idstatustagihan='1' and P.idbork='B' and left(T.idipkl,2)='$idclusternya' and P.idhuni='$idhuninya' group by T.idipkl having count(T.idipkl) > 1";
-		
-		return $this->db->query($sql);
-	}
+        public function get_pelanggan_perclusterpiutang1($idclusternya, $idhuninya) 
+{
+    $sql = "SELECT T.idipkl, P.namapelanggan, C.namacluster, P.blok, P.nokav, H.namahuni, C.tarif
+            FROM tagihan T 
+            JOIN pelanggan P ON T.idipkl = P.idipkl 
+            JOIN cluster C ON P.idcluster = C.idcluster 
+            JOIN huni H ON P.idhuni = H.idhuni 
+            WHERE T.idstatustagihan = '1' 
+              AND P.idbork = 'B' 
+              AND P.idcluster = '$idclusternya' 
+              AND P.idhuni = '$idhuninya'
+            GROUP BY T.idipkl 
+            HAVING COUNT(T.idipkl) > 1";
+
+    return $this->db->query($sql);
+}
+
         
-        public function get_pelanggan_perclusterpiutang2($idclusternya,$idhuninya) 
-	{
-		$sql="SELECT T.idipkl, P.namapelanggan, C.namacluster, P.blok, P.nokav, H.namahuni, C.tarif, count(T.idipkl) FROM tagihan T Join pelanggan P on T.idipkl = P.idipkl join cluster C on P.idcluster = C.idcluster Join huni H on P.idhuni=H.idhuni where T.idstatustagihan='1' and P.idbork='B' and left(T.idipkl,2)='$idclusternya' and P.idhuni='$idhuninya' group by T.idipkl having count(T.idipkl) > 2";
-		
-		return $this->db->query($sql);
-	}
+      public function get_pelanggan_perclusterpiutang2($idclusternya, $idhuninya) 
+{
+    $sql = "SELECT T.idipkl, P.namapelanggan, C.namacluster, P.blok, P.nokav, H.namahuni, C.tarif
+            FROM tagihan T 
+            JOIN pelanggan P ON T.idipkl = P.idipkl 
+            JOIN cluster C ON P.idcluster = C.idcluster 
+            JOIN huni H ON P.idhuni = H.idhuni 
+            WHERE T.idstatustagihan = '1' 
+              AND P.idbork = 'B' 
+              AND P.idcluster = '$idclusternya' 
+              AND P.idhuni = '$idhuninya'
+            GROUP BY T.idipkl 
+            HAVING COUNT(T.idipkl) > 2";
+
+    return $this->db->query($sql);
+}
+
         
-        public function get_pelanggan_perclusterpiutang3($idclusternya,$idhuninya) 
-	{
-		$sql="SELECT T.idipkl, P.namapelanggan, C.namacluster, P.blok, P.nokav, H.namahuni, C.tarif, count(T.idipkl) FROM tagihan T Join pelanggan P on T.idipkl = P.idipkl join cluster C on P.idcluster = C.idcluster Join huni H on P.idhuni=H.idhuni where T.idstatustagihan='1' and P.idbork='B' and left(T.idipkl,2)='$idclusternya' and P.idhuni='$idhuninya' group by T.idipkl having count(T.idipkl) > 3";
-		
-		return $this->db->query($sql);
-	}
+       public function get_pelanggan_perclusterpiutang3($idclusternya, $idhuninya) 
+{
+    $sql = "SELECT T.idipkl, P.namapelanggan, C.namacluster, P.blok, P.nokav, H.namahuni, C.tarif
+            FROM tagihan T 
+            JOIN pelanggan P ON T.idipkl = P.idipkl 
+            JOIN cluster C ON P.idcluster = C.idcluster 
+            JOIN huni H ON P.idhuni = H.idhuni 
+            WHERE T.idstatustagihan = '1' 
+              AND P.idbork = 'B' 
+              AND P.idcluster = '$idclusternya' 
+              AND P.idhuni = '$idhuninya'
+            GROUP BY T.idipkl 
+            HAVING COUNT(T.idipkl) > 3";
+
+    return $this->db->query($sql);
+}
+
 
 	public function get_pelanggan_by_blok_kavling($blok, $nokav)
 {

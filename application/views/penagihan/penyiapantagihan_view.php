@@ -52,14 +52,14 @@
 <div class="panel-footer">   
           <div class="row"> 
               <div class="col-md-10 col-sm-12 col-md-offset-2 col-sm-offset-0">
-                   <a href="<?php echo site_url('penyiapan_tagihan'); ?>" class="btn btn-default">
-                       <i class="glyphicon glyphicon-chevron-left"></i> Kembali
+                   <a href="<?php echo site_url('penyiapan_tagihan'); ?>" class="btn btn-primary">
+                       <i class="fa fa-repeat"></i> Kembali
                    </a> 
-                    <button type="submit" class="btn btn-primary" name="post">
-                        <i class="glyphicon glyphicon-floppy-save"></i> Generate Tagihan 
+                    <button type="submit" class="btn btn-warning" name="post">
+                        <i class="fa fa-save"></i> Generate Tagihan 
                     </button>
-                   <a href="<?php echo site_url('penyiapan_tagihan_khusus'); ?>" class="btn btn-default">
-                       <i class="glyphicon glyphicon-chevron-right"></i> Tagihan Khusus
+                   <a href="<?php echo site_url('penyiapan_tagihan_khusus'); ?>" class="btn btn-danger">
+                       <i class="fa fa-chevron-right"></i> Tagihan Khusus
                    </a> 
                     
               </div>

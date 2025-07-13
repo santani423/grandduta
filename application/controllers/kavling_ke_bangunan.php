@@ -49,6 +49,7 @@ class Kavling_ke_bangunan extends CI_Controller {
 			
 			// set judul halaman
 			$data['judulpage'] = "Mutasi Kavling Ke Bangunan ";
+			$data['page'] = "kavling_ke_bangunan";
 			
 			$this->template->load('template','penagihan/transaksi_view',$data);
 		}

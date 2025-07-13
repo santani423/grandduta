@@ -36,6 +36,7 @@ class Cetak_rekap_kavling extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Cetak Rekap Tagihan Kavling";
+			$data['page'] = "cetak_rekap_kavling";
 			
 			$this->template->load('template','penagihan/cetakrekapkavling_view',$data);
 		}

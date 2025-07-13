@@ -17,6 +17,8 @@ class Dashboard extends CI_Controller
 		}
 		else
 		{
+
+			
 			// load model 'usermodel'
 			$this->load->model('usermodel');
 				
@@ -31,6 +33,8 @@ class Dashboard extends CI_Controller
                         $data['total']  = $this->Master_model->count_all();
                         $data['totalbangunan']  = $this->Master_model->count_bangunan();
                         $data['totalkavling']   = $this->Master_model->count_kavling();
+
+				 
 			
 			$this->template->load('template','home/dashboard',$data);
 		}

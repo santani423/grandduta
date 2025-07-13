@@ -36,6 +36,7 @@ class Cetak_tidakangkut extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Cetak Tidak Diangkut";
+			$data['page'] = "cetak_tidakangkut";
 			
 			$this->template->load('template','laporan/cetaktidakangkut_view',$data);
 		}

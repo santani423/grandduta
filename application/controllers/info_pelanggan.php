@@ -35,6 +35,7 @@ class Info_pelanggan extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Informasi Pelanggan";
+			$data['page'] = "info_pelanggan";
 			
 			$this->template->load('template','info/infoplgpilih_view',$data);
 		}

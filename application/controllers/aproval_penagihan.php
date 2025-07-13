@@ -29,6 +29,7 @@ class Aproval_penagihan extends CI_Controller
 			
 			// set judul halaman
 			$data['judulpage'] = "Aproval Penagihan";
+			$data['page'] = "aproval_penagihan";
 			
 			$this->template->load('template','penagihan/transaksi_view',$data);
 		}
