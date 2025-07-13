@@ -930,36 +930,51 @@ Where P.idcluster='$idclusternya' and P.idbork='$idborknya' order by P.idipkl as
 	} */
 	// Chart 
 	public function get_tagihan_per_bulan($tahun)
-{
-    $this->db->select("
+	{
+		$this->db->select("
         bulan,
         SUM(CASE WHEN idstatustagihan = '1' THEN 1 ELSE 0 END) AS jumlah_belum_lunas,
         SUM(CASE WHEN idstatustagihan = '2' THEN 1 ELSE 0 END) AS jumlah_lunas
     ");
-    $this->db->from('tagihan');
-    $this->db->where('tahun', $tahun);
-    $this->db->group_by('bulan');
-    $this->db->order_by('bulan', 'ASC');
-    $query = $this->db->get()->result();
+		$this->db->from('tagihan');
+		$this->db->where('tahun', $tahun);
+		$this->db->group_by('bulan');
+		$this->db->order_by('bulan', 'ASC');
+		$query = $this->db->get()->result();
 
-    $bulanLengkap = [];
-    for ($i = 1; $i <= 12; $i++) {
-        $bln = str_pad($i, 2, '0', STR_PAD_LEFT);
-        $bulanLengkap[$bln] = ['bulan' => $bln, 'jumlah_lunas' => 0, 'jumlah_belum_lunas' => 0];
-    }
+		$bulanLengkap = [];
+		for ($i = 1; $i <= 12; $i++) {
+			$bln = str_pad($i, 2, '0', STR_PAD_LEFT);
+			$bulanLengkap[$bln] = ['bulan' => $bln, 'jumlah_lunas' => 0, 'jumlah_belum_lunas' => 0];
+		}
 
-    foreach ($query as $row) {
-        $bln = str_pad($row->bulan, 2, '0', STR_PAD_LEFT);
-        $bulanLengkap[$bln] = [
-            'bulan' => $bln,
-            'jumlah_lunas' => (int)$row->jumlah_lunas,
-            'jumlah_belum_lunas' => (int)$row->jumlah_belum_lunas
-        ];
-    }
+		foreach ($query as $row) {
+			$bln = str_pad($row->bulan, 2, '0', STR_PAD_LEFT);
+			$bulanLengkap[$bln] = [
+				'bulan' => $bln,
+				'jumlah_lunas' => (int)$row->jumlah_lunas,
+				'jumlah_belum_lunas' => (int)$row->jumlah_belum_lunas
+			];
+		}
 
-    return array_values($bulanLengkap);
-}
+		return array_values($bulanLengkap);
+	}
 
+	public function get_tagihan_per_tahun_range($tahun_awal, $tahun_akhir)
+	{
+		$this->db->select("
+        tahun,
+        SUM(CASE WHEN idstatustagihan = '1' THEN 1 ELSE 0 END) AS jumlah_belum_lunas,
+        SUM(CASE WHEN idstatustagihan = '2' THEN 1 ELSE 0 END) AS jumlah_lunas
+    ");
+		$this->db->from('tagihan');
+		$this->db->where('tahun >=', $tahun_awal);
+		$this->db->where('tahun <=', $tahun_akhir);
+		$this->db->group_by('tahun');
+		$this->db->order_by('tahun', 'ASC');
+
+		return $this->db->get()->result();
+	}
 }
 // END Absen_model Class
 
