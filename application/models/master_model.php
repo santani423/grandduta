@@ -449,46 +449,30 @@ Where P.idcluster='$idclusternya' and P.idbork='$idborknya' order by P.idipkl as
     *  @return void
     *
     */
-    public function save() 
-    {
-        $data = array(
-        		
-        		'idipkl' => strip_tags($this->input->post('idipkl', TRUE)),
-        		
-        		'namapelanggan' => strip_tags($this->input->post('namapelanggan', TRUE)),
-        		
-        		'idcluster' => strip_tags($this->input->post('cbocluster', TRUE)),
-        		
-        		'blok' => strip_tags($this->input->post('blok', TRUE)),
-        			
-        		'nokav' => strip_tags($this->input->post('nokav', TRUE)),
-        		
-        		'idbork' => strip_tags($this->input->post('cbobork', TRUE)),
-        		
-        		'nohp' => strip_tags($this->input->post('nohp', TRUE)),
-        		
-        		'notelpon' => strip_tags($this->input->post('notelpon', TRUE)),
-        		
-        		'alamatktp' => strip_tags($this->input->post('alamatktp', TRUE)),
-        		
-        		'idkecamatan' => strip_tags($this->input->post('cbokec', TRUE)),
-        		
-        		'lb' => strip_tags($this->input->post('lb', TRUE)),
-        		 
-        		'lt' => strip_tags($this->input->post('lt', TRUE)),
-        		
-        		'email' => strip_tags($this->input->post('email', TRUE)),
-        		
-        		'tglserahterima' => strip_tags($this->input->post('tglserahterima', TRUE)),
-        		
-        		'idstatuspelanggan' => strip_tags($this->input->post('cbostatusplg', TRUE)),
-        		
-        		'user_id' => strip_tags($this->session->userdata('user_id')),
-        
-        );
-                
-        $this->db->insert('pelanggan', $data);
-    }
+	public function save() 
+	{
+		$data = [
+			'idipkl'              => $this->input->post('idipkl', TRUE),
+			'namapelanggan'       => $this->input->post('namapelanggan', TRUE),
+			'idcluster'           => $this->input->post('cbocluster', TRUE),
+			'blok'                => $this->input->post('blok', TRUE),
+			'nokav'               => $this->input->post('nokav', TRUE),
+			'idbork'              => $this->input->post('cbobork', TRUE),
+			'nohp'                => $this->input->post('nohp', TRUE),
+			'notelpon'            => $this->input->post('notelpon', TRUE),
+			'alamatktp'           => $this->input->post('alamatktp', TRUE),
+			'idkecamatan'         => $this->input->post('cbokec', TRUE),
+			'lb'                  => $this->input->post('lb', TRUE),
+			'lt'                  => $this->input->post('lt', TRUE),
+			'email'               => $this->input->post('email', TRUE),
+			'tglserahterima'      => $this->input->post('tglserahterima', TRUE),
+			'idstatuspelanggan'   => $this->input->post('cbostatusplg', TRUE),
+			'user_id'             => $this->session->userdata('user_id')
+		];
+
+		return $this->db->insert('pelanggan', $data);
+	}
+
     
     public function savecluster() 
     {
@@ -642,47 +626,30 @@ Where P.idcluster='$idclusternya' and P.idbork='$idborknya' order by P.idipkl as
     *  @return void
     *
     */
-    public function update($id)
-    {
-        $data = array(
-                		
-        		'namapelanggan' => strip_tags($this->input->post('namapelanggan', TRUE)),
-        		
-        		'idcluster' => strip_tags($this->input->post('cbocluster', TRUE)),
-        		
-        		'blok' => strip_tags($this->input->post('blok', TRUE)),
-        			
-        		'nokav' => strip_tags($this->input->post('nokav', TRUE)),
-        		
-        		'idbork' => strip_tags($this->input->post('cbobork', TRUE)),
-        		
-        		'nohp' => strip_tags($this->input->post('nohp', TRUE)),
-        		
-        		'notelpon' => strip_tags($this->input->post('notelpon', TRUE)),
-        		
-        		'alamatktp' => strip_tags($this->input->post('alamatktp', TRUE)),
-        		
-        		'idkecamatan' => strip_tags($this->input->post('cbokec', TRUE)),
-        		
-        		'lb' => strip_tags($this->input->post('lb', TRUE)),
-        		 
-        		'lt' => strip_tags($this->input->post('lt', TRUE)),
-        		
-        		'email' => strip_tags($this->input->post('email', TRUE)),
-        		
-        		'tglserahterima' => strip_tags($this->input->post('tglserahterima', TRUE)),
-            
-                        'idhuni' => strip_tags($this->input->post('cbostatushuni', TRUE)),
-        		
-        		'idstatuspelanggan' => strip_tags($this->input->post('cbostatusplg', TRUE)),
-        		
-        		'user_id' => strip_tags($this->session->userdata('user_id')),
-        		
-        );        
-        
-        $this->db->where('idipkl', $id);
-        $this->db->update('pelanggan', $data);
-    }
+		public function update($id) 
+	{
+		$data = [
+			'namapelanggan'       => $this->input->post('namapelanggan', TRUE),
+			'idcluster'           => $this->input->post('cbocluster', TRUE),
+			'blok'                => $this->input->post('blok', TRUE),
+			'nokav'               => $this->input->post('nokav', TRUE),
+			'idbork'              => $this->input->post('cbobork', TRUE),
+			'nohp'                => $this->input->post('nohp', TRUE),
+			'notelpon'            => $this->input->post('notelpon', TRUE),
+			'alamatktp'           => $this->input->post('alamatktp', TRUE),
+			'idkecamatan'         => $this->input->post('cbokec', TRUE),
+			'lb'                  => $this->input->post('lb', TRUE),
+			'lt'                  => $this->input->post('lt', TRUE),
+			'email'               => $this->input->post('email', TRUE),
+			'tglserahterima'      => $this->input->post('tglserahterima', TRUE),
+			'idstatuspelanggan'   => $this->input->post('cbostatusplg', TRUE),
+			'user_id'             => $this->session->userdata('user_id')
+		];
+
+		$this->db->where('idipkl', $id);
+		return $this->db->update('pelanggan', $data);
+	}
+
     
     public function updatecluster($id)
     {
