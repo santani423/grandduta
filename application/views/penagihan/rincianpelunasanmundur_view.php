@@ -160,7 +160,7 @@
                    <?php
                			 echo anchor(
                               site_url('pelunasan_mundur/tampillunasmundur/' .$tagihan['idtagihan']),
-                                       '<i class="glyphicon glyphicon-eye-open"></i>',
+                                       '<i class="fa fa-eye"></i>',
                                        'class="btn btn-sm btn-info" data-tooltip="tooltip" data-placement="top" title="Pelunasan"'
                                       );
                    ?>
@@ -187,8 +187,8 @@
     <div class="panel-footer">   
           <div class="row"> 
               <div class="col-md-10 col-sm-12 col-md-offset-2 col-sm-offset-0">
-                   <a href="<?php echo site_url('pelunasan_mundur'); ?>" class="btn btn-default">
-                       <i class="glyphicon glyphicon-chevron-left"></i> Kembali
+                   <a href="<?php echo site_url('pelunasan_mundur'); ?>" class="btn btn-warning">
+                       <i class="fa fa-chevron-left"></i> Kembali
                    </a> 
                                       
               </div>

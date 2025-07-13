@@ -126,11 +126,11 @@
     <div class="panel-footer">   
           <div class="row"> 
               <div class="col-md-10 col-sm-12 col-md-offset-2 col-sm-offset-0">
-                   <a href="<?php echo site_url('aproval_penagihan'); ?>" class="btn btn-default">
-                       <i class="glyphicon glyphicon-chevron-left"></i> Kembali
+                   <a href="<?php echo site_url('pelunasan_mundur'); ?>" class="btn btn-warning">
+                       <i class="fa fa-chevron-left"></i> Kembali
                    </a> 
                     <button type="submit" class="btn btn-primary" name="post">
-                        <i class="glyphicon glyphicon-floppy-save"></i> Pelunasan 
+                        <i class="fa fa-save"></i> Pelunasan 
                     </button>                  
               </div>
           </div>
