@@ -251,7 +251,7 @@ class Master_pelanggan extends CI_Controller
 {
     // Validasi input
     $config = [
-        ['field' => 'idipkl', 'label' => 'ID IPKL', 'rules' => 'required|trim|xss_clean', 'errors' => ['required' => 'Data ini masih kosong, harap diisi']],
+        // ['field' => 'idipkl', 'label' => 'ID IPKL', 'rules' => 'required|trim|xss_clean', 'errors' => ['required' => 'Data ini masih kosong, harap diisi']],
         ['field' => 'namapelanggan', 'label' => 'Nama Pelanggan', 'rules' => 'required|trim|xss_clean', 'errors' => ['required' => 'Data ini masih kosong, harap diisi']],
         ['field' => 'cbocluster', 'label' => 'Cluster', 'rules' => 'required|trim|xss_clean', 'errors' => ['required' => 'Data ini masih kosong, harap diisi']],
         ['field' => 'blok', 'label' => 'Blok', 'rules' => 'required|trim|xss_clean', 'errors' => ['required' => 'Data ini masih kosong, harap diisi']],

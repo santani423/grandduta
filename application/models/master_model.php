@@ -408,10 +408,23 @@ Where P.idcluster='$idclusternya' and P.idbork='$idborknya' order by P.idipkl as
 	 */
 	public function save()
 	{
+		// Ambil idcluster dari input
+		$idcluster = $this->input->post('cbocluster', TRUE);
+
+		// Hitung jumlah pelanggan yang sudah ada dalam cluster ini
+		$this->db->where('idcluster', $idcluster); // ✅ perbaikan di sini
+		$jumlah = $this->db->count_all_results('pelanggan');
+
+		// Buat kode urutan baru (jumlah + 1), lalu format jadi 3 digit (misal: 001)
+		$urutan = str_pad($jumlah + 1, 3, '0', STR_PAD_LEFT);
+
+		// Gabungkan idcluster dan urutan untuk membentuk idipkl
+		$idipkl = $idcluster . $urutan;
+
 		$data = [
-			'idipkl'              => $this->input->post('idipkl', TRUE),
+			'idipkl'              => $idipkl,
 			'namapelanggan'       => $this->input->post('namapelanggan', TRUE),
-			'idcluster'           => $this->input->post('cbocluster', TRUE),
+			'idcluster'           => $idcluster,
 			'blok'                => $this->input->post('blok', TRUE),
 			'nokav'               => $this->input->post('nokav', TRUE),
 			'idbork'              => $this->input->post('cbobork', TRUE),
@@ -429,6 +442,7 @@ Where P.idcluster='$idclusternya' and P.idbork='$idborknya' order by P.idipkl as
 
 		return $this->db->insert('pelanggan', $data);
 	}
+
 
 
 	public function savecluster()
