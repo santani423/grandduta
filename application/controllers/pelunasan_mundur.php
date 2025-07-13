@@ -37,12 +37,9 @@ class Pelunasan_mundur extends CI_Controller
 	
 	public function querytagihan()
 {
-    if($this->auth->is_logged_in() == false)
-    {
+    if($this->auth->is_logged_in() == false) {
         $this->login();
-    }
-    else
-    {
+    } else {
         $this->load->model('usermodel');
         $this->load->model('Master_model');
         $this->load->model('Penagihan_model');
@@ -53,10 +50,10 @@ class Pelunasan_mundur extends CI_Controller
 
         $level = $this->session->userdata('level');
         $data['menu'] = $this->usermodel->get_menu_for_level($level);
-        $data['action']  = 'penagihan/querytagihan';
+        $data['action'] = 'pelunasan_mundur/querytagihan'; // ← ini perlu disesuaikan
         $data['judulpage'] = "Update Data Tagihan";
 
-        // Ambil data pelanggan berdasarkan input
+        // Ambil data pelanggan
         $pelangganbaris = $this->Penagihan_model->get_onepelanggan_multiup($idipkl, $blok, $nokav)->row();
 
         if ($pelangganbaris) {
@@ -70,13 +67,15 @@ class Pelunasan_mundur extends CI_Controller
             $data['totalnya'] = $this->Penagihan_model->get_tagihantotal_belumlunas($pelangganbaris->ID_IPKL);
         } else {
             $this->session->set_flashdata('error', 'Data pelanggan tidak ditemukan');
-            redirect('penagihan/formcari'); // ganti dengan halaman formulir pencarian
+            redirect('pelunasan_mundur'); // pastikan ini halaman form awal
             return;
         }
-		
-		$this->template->load('template','penagihan/rincianpelunasanmundur_view',$data);
+
+        // tampilkan view hasil pencarian
+        $this->template->load('template', 'penagihan/rincianpelunasanmundur_view', $data);
     }
 }
+
 
 	public function querytagihan2()
 	{
