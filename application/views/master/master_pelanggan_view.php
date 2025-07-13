@@ -45,10 +45,18 @@
             <?php echo form_close(); ?>
         </div>
     </div>
-</header>
-
+    </header>
 
     <div class="panel-body">
+
+        <!-- Alert Notifikasi -->
+        <?php
+        $notif = $this->session->flashdata('notif');
+        if (!empty($notif)) {
+            echo $notif;
+        }
+        ?>
+
         <?php if (!empty($pelanggans)) : ?>
             <table class="table table-hover table-condensed">
                 <thead>
